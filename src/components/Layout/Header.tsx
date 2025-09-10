@@ -1,0 +1,107 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Menu, X, MapPin, Users, Shield, Bell } from "lucide-react";
+import { motion } from "framer-motion";
+
+export const Header = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo & Brand */}
+          <div className="flex items-center space-x-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg gradient-civic">
+              <Shield className="h-6 w-6 text-white" />
+            </div>
+            <div className="hidden sm:block">
+              <h1 className="text-xl font-bold text-foreground">CivicReport</h1>
+              <p className="text-xs text-muted-foreground">Government Digital Platform</p>
+            </div>
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-8">
+            <a href="#" className="text-foreground hover:text-primary transition-colors font-medium">
+              Report Issue
+            </a>
+            <a href="#" className="text-foreground hover:text-primary transition-colors font-medium">
+              Track Issues
+            </a>
+            <a href="#" className="text-foreground hover:text-primary transition-colors font-medium">
+              Map Explorer
+            </a>
+            <a href="#" className="text-foreground hover:text-primary transition-colors font-medium">
+              Community
+            </a>
+          </nav>
+
+          {/* Actions */}
+          <div className="flex items-center space-x-4">
+            <Button size="sm" variant="ghost" className="relative">
+              <Bell className="h-4 w-4" />
+              <Badge className="absolute -top-1 -right-1 h-5 w-5 text-xs bg-destructive text-destructive-foreground">
+                3
+              </Badge>
+            </Button>
+            
+            <Button className="hidden sm:flex btn-civic-primary">
+              Citizen Login
+            </Button>
+            
+            <Button variant="outline" className="hidden sm:flex">
+              Admin Portal
+            </Button>
+
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="md:hidden"
+              onClick={toggleMobileMenu}
+            >
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-border mt-2 pt-4 pb-4"
+          >
+            <nav className="flex flex-col space-y-3">
+              <a href="#" className="text-foreground hover:text-primary transition-colors font-medium py-2">
+                Report Issue
+              </a>
+              <a href="#" className="text-foreground hover:text-primary transition-colors font-medium py-2">
+                Track Issues
+              </a>
+              <a href="#" className="text-foreground hover:text-primary transition-colors font-medium py-2">
+                Map Explorer
+              </a>
+              <a href="#" className="text-foreground hover:text-primary transition-colors font-medium py-2">
+                Community
+              </a>
+              <div className="flex flex-col space-y-2 pt-4">
+                <Button className="btn-civic-primary w-full">
+                  Citizen Login
+                </Button>
+                <Button variant="outline" className="w-full">
+                  Admin Portal
+                </Button>
+              </div>
+            </nav>
+          </motion.div>
+        )}
+      </div>
+    </header>
+  );
+};

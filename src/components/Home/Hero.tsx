@@ -3,8 +3,31 @@ import { Badge } from "@/components/ui/badge";
 import { FloatingActionButton } from "@/components/ui/floating-action-button";
 import { Camera, MapPin, Users, Shield, CheckCircle, BarChart3, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 
 export const Hero = () => {
+  const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleReportIssue = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      // Handle file selection - you can add more logic here
+      console.log('Selected files:', files);
+      // For now, just show an alert
+      alert(`Selected ${files.length} file(s) for issue reporting!`);
+    }
+  };
+
+  const handleExploreMap = () => {
+    navigate('/map');
+  };
+
   return (
     <>
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -63,14 +86,9 @@ export const Hero = () => {
               transition={{ delay: 0.5, duration: 0.8 }}
             >
               Empowering Citizens,
-              <motion.span 
-                className="gradient-hero bg-clip-text text-transparent block animate-shimmer"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.9, duration: 0.8, type: "spring" }}
-              >
+              <span className="gradient-hero bg-clip-text text-transparent block">
                 Building Communities
-              </motion.span>
+              </span>
             </motion.h1>
 
             {/* CTAs */}
@@ -84,7 +102,10 @@ export const Hero = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Button className="btn-framer-primary text-lg px-10 py-7">
+                <Button 
+                  className="btn-framer-primary text-lg px-10 py-7"
+                  onClick={handleReportIssue}
+                >
                   <Camera className="mr-3 h-6 w-6" />
                   Report an Issue
                 </Button>
@@ -94,7 +115,10 @@ export const Hero = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Button className="btn-framer-ghost text-lg px-10 py-7">
+                <Button 
+                  className="btn-framer-ghost text-lg px-10 py-7"
+                  onClick={handleExploreMap}
+                >
                   <MapPin className="mr-3 h-6 w-6" />
                   Explore Map
                 </Button>
@@ -135,6 +159,16 @@ export const Hero = () => {
           </motion.div>
         </div>
       </div>
+      
+      {/* Hidden file input for drag and drop functionality */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileSelect}
+        multiple
+        accept="image/*,video/*"
+        className="hidden"
+      />
       
       <FloatingActionButton className="lg:hidden" />
     </section>

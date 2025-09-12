@@ -26,17 +26,17 @@ export const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-foreground hover:text-primary transition-colors font-medium">
+            <a href="/report" className="text-foreground hover:text-primary transition-colors font-medium">
               Report Issue
             </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors font-medium">
-              Track Issues
-            </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors font-medium">
+            <a href="/map" className="text-foreground hover:text-primary transition-colors font-medium">
               Map Explorer
             </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors font-medium">
-              Community
+            <a href="/about" className="text-foreground hover:text-primary transition-colors font-medium">
+              About
+            </a>
+            <a href="/contact" className="text-foreground hover:text-primary transition-colors font-medium">
+              Contact
             </a>
           </nav>
 
@@ -49,12 +49,8 @@ export const Header = () => {
               </Badge>
             </Button>
             
-            <Button className="hidden sm:flex btn-civic-primary">
-              Citizen Login
-            </Button>
-            
-            <Button variant="outline" className="hidden sm:flex">
-              Admin Portal
+            <Button className="hidden sm:flex btn-civic-primary" onClick={() => window.location.href = '/login'}>
+              Login
             </Button>
 
             {/* Mobile Menu Button */}
@@ -78,24 +74,21 @@ export const Header = () => {
             className="md:hidden border-t border-border mt-2 pt-4 pb-4"
           >
             <nav className="flex flex-col space-y-3">
-              <a href="#" className="text-foreground hover:text-primary transition-colors font-medium py-2">
+              <a href="/report" className="text-foreground hover:text-primary transition-colors font-medium py-2">
                 Report Issue
               </a>
-              <a href="#" className="text-foreground hover:text-primary transition-colors font-medium py-2">
-                Track Issues
-              </a>
-              <a href="#" className="text-foreground hover:text-primary transition-colors font-medium py-2">
+              <a href="/map" className="text-foreground hover:text-primary transition-colors font-medium py-2">
                 Map Explorer
               </a>
-              <a href="#" className="text-foreground hover:text-primary transition-colors font-medium py-2">
-                Community
+              <a href="/about" className="text-foreground hover:text-primary transition-colors font-medium py-2">
+                About
+              </a>
+              <a href="/contact" className="text-foreground hover:text-primary transition-colors font-medium py-2">
+                Contact
               </a>
               <div className="flex flex-col space-y-2 pt-4">
-                <Button className="btn-civic-primary w-full">
-                  Citizen Login
-                </Button>
-                <Button variant="outline" className="w-full">
-                  Admin Portal
+                <Button className="btn-civic-primary w-full" onClick={() => window.location.href = '/login'}>
+                  Login
                 </Button>
               </div>
             </nav>

@@ -6,15 +6,14 @@ import { Input } from "@/components/ui/input";
 import { ArrowLeft, MapPin, Search, Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
 
 const MapExplorer = () => {
   const navigate = useNavigate();
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState('');
-  const [showTokenInput, setShowTokenInput] = useState(true);
+  const map = useRef<google.maps.Map | null>(null);
+  const [googleMapsKey, setGoogleMapsKey] = useState('');
+  const [showKeyInput, setShowKeyInput] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Bhubaneswar coordinates and ward data
   const bhubaneswarCenter: [number, number] = [85.8245, 20.2961];
@@ -31,95 +30,98 @@ const MapExplorer = () => {
     { id: 8, name: "Ward 8 - Kalinga Nagar", issues: 9, lat: 20.2847, lng: 85.7784 }
   ];
 
-  const initializeMap = (token: string) => {
+  const initializeMap = (apiKey: string) => {
     if (!mapContainer.current) return;
 
-    mapboxgl.accessToken = token;
-    
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
-      center: bhubaneswarCenter,
-      zoom: 11,
-    });
+    // Load Google Maps API
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+    script.async = true;
+    script.defer = true;
 
-    // Add navigation controls
-    map.current.addControl(
-      new mapboxgl.NavigationControl(),
-      'top-right'
-    );
+    // Create global callback function
+    (window as any).initMap = () => {
+      setIsLoaded(true);
+      
+      const mapOptions: google.maps.MapOptions = {
+        center: { lat: bhubaneswarCenter[1], lng: bhubaneswarCenter[0] },
+        zoom: 11,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        styles: [
+          {
+            featureType: "all",
+            elementType: "geometry.fill",
+            stylers: [{ color: "#f5f5f5" }]
+          },
+          {
+            featureType: "water",
+            elementType: "geometry",
+            stylers: [{ color: "#e9f3ff" }]
+          }
+        ]
+      };
 
-    // Add ward markers when map loads
-    map.current.on('load', () => {
+      map.current = new google.maps.Map(mapContainer.current!, mapOptions);
+
+      // Add ward markers
       wards.forEach((ward) => {
-        // Create a custom marker element
-        const el = document.createElement('div');
-        el.className = 'ward-marker';
-        el.style.cssText = `
-          background: #1A73E8;
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-weight: bold;
-          font-size: 12px;
-          border: 3px solid white;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-          transition: all 0.3s ease;
-        `;
-        el.textContent = ward.issues.toString();
-
-        // Add hover effects
-        el.addEventListener('mouseenter', () => {
-          el.style.transform = 'scale(1.2)';
-          el.style.background = '#2ECC71';
-        });
-        
-        el.addEventListener('mouseleave', () => {
-          el.style.transform = 'scale(1)';
-          el.style.background = '#1A73E8';
+        const marker = new google.maps.Marker({
+          position: { lat: ward.lat, lng: ward.lng },
+          map: map.current!,
+          title: ward.name,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 15,
+            fillColor: '#1A73E8',
+            fillOpacity: 1,
+            strokeColor: '#ffffff',
+            strokeWeight: 3
+          }
         });
 
-        // Create popup
-        const popup = new mapboxgl.Popup({
-          offset: 25,
-          closeButton: true,
-          closeOnClick: false
-        }).setHTML(`
-          <div class="p-4 min-w-[200px]">
-            <h3 class="font-bold text-lg mb-2">${ward.name}</h3>
-            <p class="text-sm text-gray-600 mb-2">Active Issues: <span class="font-semibold text-red-500">${ward.issues}</span></p>
-            <div class="flex gap-2 mt-3">
-              <button class="px-3 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600">View Issues</button>
-              <button class="px-3 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600">Report Issue</button>
+        const infoWindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding: 10px; min-width: 200px;">
+              <h3 style="font-weight: bold; font-size: 16px; margin-bottom: 8px;">${ward.name}</h3>
+              <p style="font-size: 14px; color: #666; margin-bottom: 8px;">
+                Active Issues: <span style="font-weight: 600; color: #dc2626;">${ward.issues}</span>
+              </p>
+              <div style="display: flex; gap: 8px; margin-top: 12px;">
+                <button style="padding: 4px 12px; background: #1A73E8; color: white; border: none; border-radius: 4px; font-size: 12px; cursor: pointer;">
+                  View Issues
+                </button>
+                <button style="padding: 4px 12px; background: #2ECC71; color: white; border: none; border-radius: 4px; font-size: 12px; cursor: pointer;">
+                  Report Issue
+                </button>
+              </div>
             </div>
-          </div>
-        `);
+          `
+        });
 
-        // Create marker
-        new mapboxgl.Marker(el)
-          .setLngLat([ward.lng, ward.lat])
-          .setPopup(popup)
-          .addTo(map.current!);
+        marker.addListener('click', () => {
+          infoWindow.open(map.current!, marker);
+        });
       });
-    });
+    };
+
+    document.head.appendChild(script);
   };
 
-  const handleTokenSubmit = (e: React.FormEvent) => {
+  const handleKeySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (mapboxToken.trim()) {
-      setShowTokenInput(false);
-      initializeMap(mapboxToken);
+    if (googleMapsKey.trim()) {
+      setShowKeyInput(false);
+      initializeMap(googleMapsKey);
     }
   };
 
   useEffect(() => {
     return () => {
-      map.current?.remove();
+      // Clean up Google Maps instance
+      if (map.current) {
+        // Google Maps doesn't have a remove method like Mapbox
+        map.current = null;
+      }
     };
   }, []);
 
@@ -166,7 +168,7 @@ const MapExplorer = () => {
         {/* Map Section */}
         <section className="py-12">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            {showTokenInput ? (
+            {showKeyInput ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -174,16 +176,16 @@ const MapExplorer = () => {
                 className="max-w-md mx-auto glass-effect p-8 rounded-3xl text-center"
               >
                 <MapPin className="h-16 w-16 text-primary mx-auto mb-6" />
-                <h2 className="text-2xl font-bold mb-4">Setup Map Access</h2>
+                <h2 className="text-2xl font-bold mb-4">Setup Google Maps</h2>
                 <p className="text-muted-foreground mb-6">
-                  Please enter your Mapbox public token to view the interactive map.
+                  Please enter your Google Maps API key to view the interactive ward map.
                 </p>
-                <form onSubmit={handleTokenSubmit} className="space-y-4">
+                <form onSubmit={handleKeySubmit} className="space-y-4">
                   <Input
                     type="text"
-                    placeholder="pk.eyJ1Ijoi..."
-                    value={mapboxToken}
-                    onChange={(e) => setMapboxToken(e.target.value)}
+                    placeholder="AIzaSy..."
+                    value={googleMapsKey}
+                    onChange={(e) => setGoogleMapsKey(e.target.value)}
                     className="w-full"
                   />
                   <Button type="submit" className="btn-framer-primary w-full">
@@ -192,7 +194,7 @@ const MapExplorer = () => {
                 </form>
                 <div className="mt-4 p-4 bg-blue-50 rounded-lg text-sm text-left">
                   <Info className="h-4 w-4 inline mr-2" />
-                  Get your token from <a href="https://mapbox.com" target="_blank" rel="noopener noreferrer" className="text-primary underline">mapbox.com</a>
+                  Get your API key from <a href="https://console.cloud.google.com" target="_blank" rel="noopener noreferrer" className="text-primary underline">Google Cloud Console</a>
                 </div>
               </motion.div>
             ) : (

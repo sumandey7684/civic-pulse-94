@@ -149,7 +149,7 @@ const MapExplorer = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-4">
-                Bhubaneswar Ward Map
+                Bhubaneswar Map Ward wise
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl">
                 Explore civic issues across Bhubaneswar municipality ward-wise. 

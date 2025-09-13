@@ -2,13 +2,13 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  BarChart3, 
-  Users, 
-  MapPin, 
-  AlertCircle, 
-  CheckCircle, 
-  Clock, 
+import {
+  BarChart3,
+  Users,
+  MapPin,
+  AlertCircle,
+  CheckCircle,
+  Clock,
   Settings,
   FileText,
   TrendingUp,
@@ -17,7 +17,7 @@ import {
   MoreHorizontal,
   Eye,
   Edit,
-  Archive
+  Archive,
 } from "lucide-react";
 import { Header } from "@/components/Layout/Header";
 import { Footer } from "@/components/Layout/Footer";
@@ -31,7 +31,7 @@ const AdminDashboard = () => {
       change: "+12%",
       icon: AlertCircle,
       color: "text-blue-500",
-      bgColor: "bg-blue-50"
+      bgColor: "bg-blue-50",
     },
     {
       title: "Active Users",
@@ -39,7 +39,7 @@ const AdminDashboard = () => {
       change: "+8%",
       icon: Users,
       color: "text-green-500",
-      bgColor: "bg-green-50"
+      bgColor: "bg-green-50",
     },
     {
       title: "Resolved Today",
@@ -47,7 +47,7 @@ const AdminDashboard = () => {
       change: "+23%",
       icon: CheckCircle,
       color: "text-emerald-500",
-      bgColor: "bg-emerald-50"
+      bgColor: "bg-emerald-50",
     },
     {
       title: "Pending Issues",
@@ -55,76 +55,105 @@ const AdminDashboard = () => {
       change: "-5%",
       icon: Clock,
       color: "text-orange-500",
-      bgColor: "bg-orange-50"
-    }
+      bgColor: "bg-orange-50",
+    },
   ];
 
   const recentIssues = [
     {
       id: "ISS-1001",
-      title: "Pothole on Main Street",
-      location: "Ward 5, Main Street",
+      title: "Pothole on Janpath Road",
+      location: "Ward 5, Janpath Road",
       priority: "High",
       status: "In Progress",
       assignee: "Road Dept.",
-      reportedBy: "John Doe",
-      timeAgo: "2 hours ago"
+      reportedBy: "Pradeep Das",
+      timeAgo: "2 hours ago",
     },
     {
-      id: "ISS-1002", 
+      id: "ISS-1002",
       title: "Broken Street Light",
-      location: "Ward 2, Park Avenue",
+      location: "Ward 2, Saheed Nagar",
       priority: "Medium",
-      status: "Pending", 
+      status: "Pending",
       assignee: "Electrical Dept.",
-      reportedBy: "Jane Smith",
-      timeAgo: "4 hours ago"
+      reportedBy: "Ipsita Mohanty",
+      timeAgo: "4 hours ago",
     },
     {
       id: "ISS-1003",
       title: "Garbage Collection Missed",
-      location: "Ward 1, Oak Street",
+      location: "Ward 1, Kharvel Nagar",
       priority: "Low",
       status: "Resolved",
       assignee: "Sanitation Dept.",
-      reportedBy: "Mike Johnson",
-      timeAgo: "1 day ago"
+      reportedBy: "Bikash Sahu",
+      timeAgo: "1 day ago",
     },
     {
       id: "ISS-1004",
       title: "Water Supply Disruption",
-      location: "Ward 3, Elm Street",
+      location: "Ward 3, Nandan Vihar",
       priority: "Critical",
       status: "In Progress",
       assignee: "Water Dept.",
-      reportedBy: "Sarah Wilson",
-      timeAgo: "30 minutes ago"
-    }
+      reportedBy: "Swapna Patnaik",
+      timeAgo: "30 minutes ago",
+    },
+    {
+      id: "ISS-1005",
+      title: "Overflowing Drain",
+      location: "Ward 4, Bapuji Nagar",
+      priority: "High",
+      status: "Pending",
+      assignee: "Sanitation Dept.",
+      reportedBy: "Rohit Behera",
+      timeAgo: "3 hours ago",
+    },
+    {
+      id: "ISS-1006",
+      title: "Traffic Signal Not Working",
+      location: "Ward 6, Janpath Crossing",
+      priority: "Medium",
+      status: "In Progress",
+      assignee: "Traffic Dept.",
+      reportedBy: "Sasmita Patra",
+      timeAgo: "1 hour ago",
+    },
   ];
 
   const getPriorityColor = (priority: string) => {
-    switch(priority) {
-      case "Critical": return "bg-red-100 text-red-800";
-      case "High": return "bg-orange-100 text-orange-800";
-      case "Medium": return "bg-yellow-100 text-yellow-800";
-      case "Low": return "bg-green-100 text-green-800";
-      default: return "bg-gray-100 text-gray-800";
+    switch (priority) {
+      case "Critical":
+        return "bg-red-100 text-red-800";
+      case "High":
+        return "bg-orange-100 text-orange-800";
+      case "Medium":
+        return "bg-yellow-100 text-yellow-800";
+      case "Low":
+        return "bg-green-100 text-green-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getStatusColor = (status: string) => {
-    switch(status) {
-      case "Resolved": return "bg-green-100 text-green-800";
-      case "In Progress": return "bg-blue-100 text-blue-800";
-      case "Pending": return "bg-yellow-100 text-yellow-800";
-      default: return "bg-gray-100 text-gray-800";
+    switch (status) {
+      case "Resolved":
+        return "bg-green-100 text-green-800";
+      case "In Progress":
+        return "bg-blue-100 text-blue-800";
+      case "Pending":
+        return "bg-yellow-100 text-yellow-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="container mx-auto px-4 pt-24 pb-16">
         {/* Welcome Section */}
         <motion.div
@@ -139,7 +168,8 @@ const AdminDashboard = () => {
                 Admin Dashboard
               </h1>
               <p className="text-muted-foreground">
-                Manage civic issues, oversee operations, and track performance metrics
+                Manage civic issues, oversee operations, and track performance
+                metrics
               </p>
             </div>
             <div className="flex gap-2">
@@ -267,9 +297,7 @@ const AdminDashboard = () => {
                   ))}
                 </div>
                 <div className="mt-4 text-center">
-                  <Button variant="outline">
-                    View All Issues
-                  </Button>
+                  <Button variant="outline">View All Issues</Button>
                 </div>
               </CardContent>
             </Card>

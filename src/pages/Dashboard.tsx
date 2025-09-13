@@ -1,23 +1,29 @@
-import React from 'react';
-import { useAuth } from '@/components/AuthProvider';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Header } from '@/components/Layout/Header';
-import { Footer } from '@/components/Layout/Footer';
-import { 
-  MapPin, 
-  Clock, 
-  CheckCircle, 
-  AlertCircle, 
-  Users, 
+import React from "react";
+import { useAuth } from "@/components/AuthProvider";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Header } from "@/components/Layout/Header";
+import { Footer } from "@/components/Layout/Footer";
+import {
+  MapPin,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  Users,
   FileText,
   TrendingUp,
-  LogOut
-} from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
+  LogOut,
+} from "lucide-react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 /**
  * Citizen Dashboard Component
@@ -32,122 +38,121 @@ const Dashboard = () => {
   const handleLogout = async () => {
     const { error } = await signOut();
     if (error) {
-      toast.error('Error signing out: ' + error.message);
+      toast.error("Error signing out: " + error.message);
     } else {
-      toast.success('Successfully signed out');
-      navigate('/');
+      toast.success("Successfully signed out");
+      navigate("/");
     }
   };
 
   // Mock data for demonstration
   const userReports = [
-  {
-    id: 1,
-    title: 'Broken Street Light',
-    location: 'Utkal Hospital road, Chandrasekharpur',
-    status: 'resolved',
-    date: '2025-08-15',
-    category: 'Infrastructure',
-    color: 'green',
-    icon: '✅'
-  },
-  {
-    id: 2,
-    title: 'Pothole on Highway',
-    location: 'Jaydev Vihar Square',
-    status: 'in_progress',
-    date: '2025-07-20',
-    category: 'Roads',
-    color: 'orange',
-    icon: '⚠️'
-  },
-  {
-    id: 3,
-    title: 'Illegal Dumping',
-    location: 'Park Avenue',
-    status: 'submitted',
-    date: '2025-01-22',
-    category: 'Environment',
-    color: 'red',
-    icon: '❌'
-  },
-  {
-    id: 4,
-    title: 'Overflowing Drainage',
-    location: 'Saheed Nagar, near Rama Devi Women’s University',
-    status: 'submitted',
-    date: '2025-03-10',
-    category: 'Sanitation',
-    color: 'red',
-    icon: '❌'
-  },
-  {
-    id: 5,
-    title: 'Damaged Footpath Tiles',
-    location: 'Master Canteen Square',
-    status: 'in_progress',
-    date: '2025-05-02',
-    category: 'Infrastructure',
-    color: 'orange',
-    icon: '⚠️'
-  },
-  {
-    id: 6,
-    title: 'Garbage Not Collected',
-    location: 'Unit-4 Market Area',
-    status: 'resolved',
-    date: '2025-04-18',
-    category: 'Waste Management',
-    color: 'green',
-    icon: '✅'
-  },
-  {
-    id: 7,
-    title: 'Waterlogging after Rain',
-    location: 'Patia Big Bazaar Road',
-    status: 'in_progress',
-    date: '2025-06-25',
-    category: 'Drainage',
-    color: 'orange',
-    icon: '⚠️'
-  },
-  {
-    id: 8,
-    title: 'Unauthorized Parking',
-    location: 'Bapuji Nagar Main Road',
-    status: 'submitted',
-    date: '2025-02-12',
-    category: 'Traffic',
-    color: 'red',
-    icon: '❌'
-  },
-  {
-    id: 9,
-    title: 'Broken Public Bench',
-    location: 'IG Park, near Entry Gate',
-    status: 'resolved',
-    date: '2025-03-28',
-    category: 'Parks',
-    color: 'green',
-    icon: '✅'
-  }
-]
-
+    {
+      id: 1,
+      title: "Broken Street Light",
+      location: "Utkal Hospital road, Chandrasekharpur",
+      status: "resolved",
+      date: "2025-08-15",
+      category: "Infrastructure",
+      color: "green",
+      icon: "✅",
+    },
+    {
+      id: 2,
+      title: "Pothole on Highway",
+      location: "Jaydev Vihar Square",
+      status: "in_progress",
+      date: "2025-07-20",
+      category: "Roads",
+      color: "orange",
+      icon: "⚠️",
+    },
+    {
+      id: 3,
+      title: "Illegal Dumping",
+      location: "Buddha Jayanti Park, Niladri Vihar",
+      status: "submitted",
+      date: "2025-08-22",
+      category: "Environment",
+      color: "red",
+      icon: "❌",
+    },
+    {
+      id: 4,
+      title: "Overflowing Drainage",
+      location: "Saheed Nagar, near Rama Devi Women’s University",
+      status: "submitted",
+      date: "2025-03-10",
+      category: "Sanitation",
+      color: "red",
+      icon: "❌",
+    },
+    {
+      id: 5,
+      title: "Damaged Footpath Tiles",
+      location: "Master Canteen Square",
+      status: "in_progress",
+      date: "2025-05-02",
+      category: "Infrastructure",
+      color: "orange",
+      icon: "⚠️",
+    },
+    {
+      id: 6,
+      title: "Garbage Not Collected",
+      location: "Unit-4 Market Area",
+      status: "resolved",
+      date: "2025-04-18",
+      category: "Waste Management",
+      color: "green",
+      icon: "✅",
+    },
+    {
+      id: 7,
+      title: "Waterlogging after Rain",
+      location: "Patia Big Bazaar Road",
+      status: "in_progress",
+      date: "2025-06-25",
+      category: "Drainage",
+      color: "orange",
+      icon: "⚠️",
+    },
+    {
+      id: 8,
+      title: "Unauthorized Parking",
+      location: "Bapuji Nagar Main Road",
+      status: "submitted",
+      date: "2025-02-12",
+      category: "Traffic",
+      color: "red",
+      icon: "❌",
+    },
+    {
+      id: 9,
+      title: "Broken Public Bench",
+      location: "IG Park, near Entry Gate",
+      status: "resolved",
+      date: "2025-03-28",
+      category: "Parks",
+      color: "green",
+      icon: "✅",
+    },
+  ];
 
   const communityStats = [
-    { label: 'Total Reports', value: '1,247', icon: FileText, trend: '+12%' },
-    { label: 'Resolved Issues', value: '892', icon: CheckCircle, trend: '+8%' },
-    { label: 'Active Citizens', value: '543', icon: Users, trend: '+15%' },
-    { label: 'Response Time', value: '2.3 days', icon: Clock, trend: '-0.5d' }
+    { label: "Total Reports", value: "1,247", icon: FileText, trend: "+12%" },
+    { label: "Resolved Issues", value: "892", icon: CheckCircle, trend: "+8%" },
+    { label: "Active Citizens", value: "543", icon: Users, trend: "+15%" },
+    { label: "Response Time", value: "2.3 days", icon: Clock, trend: "-0.5d" },
   ];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'resolved':
+      case "resolved":
         return <Badge className="status-resolved">Resolved</Badge>;
-      case 'in_progress':
+      case "in_progress":
         return <Badge className="status-progress">In Progress</Badge>;
-      case 'submitted':
+      case "submitted":
         return <Badge className="status-submitted">Submitted</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
@@ -157,7 +162,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="pt-20 pb-12">
         {/* Welcome Section */}
         <section className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-12">
@@ -173,7 +178,8 @@ const Dashboard = () => {
                   Welcome Back!
                 </h1>
                 <p className="text-xl text-muted-foreground">
-                  Hello {user?.email}, manage your civic reports and track community issues
+                  Hello {user?.email}, manage your civic reports and track
+                  community issues
                 </p>
               </div>
               <Button
@@ -223,7 +229,9 @@ const Dashboard = () => {
                         </div>
                         <div className="flex items-center justify-center">
                           <TrendingUp className="h-4 w-4 text-success mr-1" />
-                          <span className="text-sm text-success">{stat.trend}</span>
+                          <span className="text-sm text-success">
+                            {stat.trend}
+                          </span>
                         </div>
                       </CardContent>
                     </Card>
@@ -247,14 +255,14 @@ const Dashboard = () => {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 <Button
-                  onClick={() => navigate('/report')}
+                  onClick={() => navigate("/report")}
                   className="btn-framer-primary h-20 text-lg"
                 >
                   <FileText className="mr-3 h-6 w-6" />
                   Report New Issue
                 </Button>
                 <Button
-                  onClick={() => navigate('/map')}
+                  onClick={() => navigate("/map")}
                   className="btn-framer-secondary h-20 text-lg"
                 >
                   <MapPin className="mr-3 h-6 w-6" />
@@ -295,7 +303,9 @@ const Dashboard = () => {
                       <CardHeader>
                         <div className="flex items-start justify-between">
                           <div>
-                            <CardTitle className="text-xl">{report.title}</CardTitle>
+                            <CardTitle className="text-xl">
+                              {report.title}
+                            </CardTitle>
                             <CardDescription className="flex items-center mt-2">
                               <MapPin className="h-4 w-4 mr-1" />
                               {report.location}
@@ -321,7 +331,7 @@ const Dashboard = () => {
           </div>
         </section>
       </main>
-      
+
       <Footer />
     </div>
   );

@@ -1,24 +1,30 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { 
-  BarChart3, 
-  Users, 
-  AlertTriangle, 
-  CheckCircle, 
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  BarChart3,
+  Users,
+  AlertTriangle,
+  CheckCircle,
   Clock,
   MapPin,
   FileText,
   TrendingUp,
   TrendingDown,
   Calendar,
-  Eye
-} from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AdminSidebar } from '@/components/Admin/AdminSidebar';
-import { AdminHeader } from '@/components/Admin/AdminHeader';
+  Eye,
+} from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminSidebar } from "@/components/Admin/AdminSidebar";
+import { AdminHeader } from "@/components/Admin/AdminHeader";
 
 /**
  * Admin Dashboard Component
@@ -34,15 +40,15 @@ const AdminDashboard = () => {
       change: "+12.5%",
       trend: "up",
       icon: FileText,
-      color: "blue"
+      color: "blue",
     },
     {
-      title: "Solved Issues", 
+      title: "Solved Issues",
       value: "1,923",
       change: "+8.2%",
-      trend: "up", 
+      trend: "up",
       icon: CheckCircle,
-      color: "green"
+      color: "green",
     },
     {
       title: "Pending Issues",
@@ -50,7 +56,7 @@ const AdminDashboard = () => {
       change: "-3.1%",
       trend: "down",
       icon: Clock,
-      color: "orange"
+      color: "orange",
     },
     {
       title: "Active Citizens",
@@ -58,8 +64,8 @@ const AdminDashboard = () => {
       change: "+15.3%",
       trend: "up",
       icon: Users,
-      color: "purple"
-    }
+      color: "purple",
+    },
   ];
 
   const wardData = [
@@ -67,39 +73,39 @@ const AdminDashboard = () => {
     { ward: "Jaydev Vihar", issues: 98, solved: 67, pending: 31 },
     { ward: "Saheed Nagar", issues: 156, solved: 102, pending: 54 },
     { ward: "Unit-4", issues: 87, solved: 73, pending: 14 },
-    { ward: "Patia", issues: 145, solved: 98, pending: 47 }
+    { ward: "Patia", issues: 145, solved: 98, pending: 47 },
   ];
 
   const recentReports = [
     {
       id: 1,
-      reporterName: "Priya Sharma",
-      ward: "Chandrasekharpur", 
+      reporterName: "Suman Dey",
+      ward: "Chandrasekharpur",
       location: "Utkal Hospital Road",
       category: "Infrastructure",
       status: "pending",
       dateReported: "2025-01-12",
-      priority: "high"
+      priority: "high",
     },
     {
       id: 2,
       reporterName: "Rajesh Kumar",
       ward: "Jaydev Vihar",
-      location: "Square Area", 
+      location: "Square Area",
       category: "Roads",
       status: "in_progress",
       dateReported: "2025-01-11",
-      priority: "medium"
+      priority: "medium",
     },
     {
       id: 3,
       reporterName: "Anita Patel",
       ward: "Saheed Nagar",
       location: "Near Rama Devi University",
-      category: "Sanitation", 
+      category: "Sanitation",
       status: "solved",
       dateReported: "2025-01-10",
-      priority: "low"
+      priority: "low",
     },
     {
       id: 4,
@@ -109,28 +115,40 @@ const AdminDashboard = () => {
       category: "Waste Management",
       status: "pending",
       dateReported: "2025-01-09",
-      priority: "high"
+      priority: "high",
     },
     {
       id: 5,
       reporterName: "Meera Das",
-      ward: "Patia", 
+      ward: "Patia",
       location: "Big Bazaar Road",
       category: "Drainage",
       status: "in_progress",
       dateReported: "2025-01-08",
-      priority: "medium"
-    }
+      priority: "medium",
+    },
   ];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'solved':
-        return <Badge className="bg-success/10 text-success hover:bg-success/20">Solved</Badge>;
-      case 'in_progress':
-        return <Badge className="bg-warning/10 text-warning hover:bg-warning/20">In Progress</Badge>;
-      case 'pending':
-        return <Badge className="bg-destructive/10 text-destructive hover:bg-destructive/20">Pending</Badge>;
+      case "solved":
+        return (
+          <Badge className="bg-success/10 text-success hover:bg-success/20">
+            Solved
+          </Badge>
+        );
+      case "in_progress":
+        return (
+          <Badge className="bg-warning/10 text-warning hover:bg-warning/20">
+            In Progress
+          </Badge>
+        );
+      case "pending":
+        return (
+          <Badge className="bg-destructive/10 text-destructive hover:bg-destructive/20">
+            Pending
+          </Badge>
+        );
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -138,14 +156,30 @@ const AdminDashboard = () => {
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-      case 'high':
-        return <Badge variant="destructive" className="text-xs">High</Badge>;
-      case 'medium':
-        return <Badge variant="outline" className="text-xs">Medium</Badge>;
-      case 'low':
-        return <Badge variant="secondary" className="text-xs">Low</Badge>;
+      case "high":
+        return (
+          <Badge variant="destructive" className="text-xs">
+            High
+          </Badge>
+        );
+      case "medium":
+        return (
+          <Badge variant="outline" className="text-xs">
+            Medium
+          </Badge>
+        );
+      case "low":
+        return (
+          <Badge variant="secondary" className="text-xs">
+            Low
+          </Badge>
+        );
       default:
-        return <Badge variant="secondary" className="text-xs">{priority}</Badge>;
+        return (
+          <Badge variant="secondary" className="text-xs">
+            {priority}
+          </Badge>
+        );
     }
   };
 
@@ -153,10 +187,10 @@ const AdminDashboard = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
         <AdminSidebar />
-        
+
         <div className="flex-1 flex flex-col">
           <AdminHeader />
-          
+
           <main className="flex-1 p-6 space-y-6 overflow-auto">
             {/* Welcome Section */}
             <motion.div
@@ -199,14 +233,18 @@ const AdminDashboard = () => {
                             {stat.value}
                           </p>
                           <div className="flex items-center mt-2">
-                            {stat.trend === 'up' ? (
+                            {stat.trend === "up" ? (
                               <TrendingUp className="h-4 w-4 text-success mr-1" />
                             ) : (
                               <TrendingDown className="h-4 w-4 text-destructive mr-1" />
                             )}
-                            <span className={`text-sm ${
-                              stat.trend === 'up' ? 'text-success' : 'text-destructive'
-                            }`}>
+                            <span
+                              className={`text-sm ${
+                                stat.trend === "up"
+                                  ? "text-success"
+                                  : "text-destructive"
+                              }`}
+                            >
                               {stat.change}
                             </span>
                             <span className="text-sm text-muted-foreground ml-1">
@@ -214,8 +252,12 @@ const AdminDashboard = () => {
                             </span>
                           </div>
                         </div>
-                        <div className={`w-12 h-12 rounded-lg bg-${stat.color}-500/10 flex items-center justify-center`}>
-                          <stat.icon className={`h-6 w-6 text-${stat.color}-500`} />
+                        <div
+                          className={`w-12 h-12 rounded-lg bg-${stat.color}-500/10 flex items-center justify-center`}
+                        >
+                          <stat.icon
+                            className={`h-6 w-6 text-${stat.color}-500`}
+                          />
                         </div>
                       </div>
                     </CardContent>
@@ -252,7 +294,9 @@ const AdminDashboard = () => {
                           className="flex items-center justify-between p-3 rounded-lg bg-muted/30"
                         >
                           <div>
-                            <p className="font-medium text-foreground">{ward.ward}</p>
+                            <p className="font-medium text-foreground">
+                              {ward.ward}
+                            </p>
                             <p className="text-sm text-muted-foreground">
                               {ward.issues} total issues
                             </p>
@@ -362,12 +406,8 @@ const AdminDashboard = () => {
                                 {report.category}
                               </Badge>
                             </div>
-                            <div>
-                              {getStatusBadge(report.status)}
-                            </div>
-                            <div>
-                              {getPriorityBadge(report.priority)}
-                            </div>
+                            <div>{getStatusBadge(report.status)}</div>
+                            <div>{getPriorityBadge(report.priority)}</div>
                             <div className="text-muted-foreground flex items-center">
                               <Calendar className="h-3 w-3 mr-1" />
                               {report.dateReported}

@@ -138,7 +138,6 @@ export const Hero = () => {
               <div className="space-y-6">
                 {[
                   { icon: Camera, title: "Take a Photo", color: "primary" },
-                  { icon: MapPin, title: "Add Location", color: "secondary" },
                   { icon: CheckCircle, title: "Track Progress", color: "success" }
                 ].map((step, index) => (
                   <motion.div 

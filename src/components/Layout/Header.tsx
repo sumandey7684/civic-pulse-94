@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Menu, X, MapPin, Users, Shield, Bell } from "lucide-react";
 import { motion } from "framer-motion";
+import { NotificationDropdown } from "@/components/Notifications/NotificationDropdown";
 
 export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -42,12 +43,7 @@ export const Header = () => {
 
           {/* Actions */}
           <div className="flex items-center space-x-4">
-            <Button size="sm" variant="ghost" className="relative">
-              <Bell className="h-4 w-4" />
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 text-xs bg-destructive text-destructive-foreground">
-                3
-              </Badge>
-            </Button>
+            <NotificationDropdown />
             
             <Button className="hidden sm:flex btn-civic-primary" onClick={() => window.location.href = '/login'}>
               Login

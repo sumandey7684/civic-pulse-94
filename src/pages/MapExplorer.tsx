@@ -11,8 +11,7 @@ const MapExplorer = () => {
   const navigate = useNavigate();
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<google.maps.Map | null>(null);
-  const [googleMapsKey, setGoogleMapsKey] = useState('');
-  const [showKeyInput, setShowKeyInput] = useState(true);
+  const googleMapsKey = 'AIzaSyBHANuLiL9wSAB6aLNXbnLzVebSe3TcCQs'; // Hardcoded API key
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Bhubaneswar coordinates and ward data
@@ -107,15 +106,10 @@ const MapExplorer = () => {
     document.head.appendChild(script);
   };
 
-  const handleKeySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (googleMapsKey.trim()) {
-      setShowKeyInput(false);
-      initializeMap(googleMapsKey);
-    }
-  };
-
   useEffect(() => {
+    // Auto-initialize map on component mount
+    initializeMap(googleMapsKey);
+    
     return () => {
       // Clean up Google Maps instance
       if (map.current) {
@@ -168,90 +162,59 @@ const MapExplorer = () => {
         {/* Map Section */}
         <section className="py-12">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            {showKeyInput ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6 }}
-                className="max-w-md mx-auto glass-effect p-8 rounded-3xl text-center"
-              >
-                <MapPin className="h-16 w-16 text-primary mx-auto mb-6" />
-                <h2 className="text-2xl font-bold mb-4">Setup Google Maps</h2>
-                <p className="text-muted-foreground mb-6">
-                  Please enter your Google Maps API key to view the interactive ward map.
-                </p>
-                <form onSubmit={handleKeySubmit} className="space-y-4">
-                  <Input
-                    type="text"
-                    placeholder="AIzaSy..."
-                    value={googleMapsKey}
-                    onChange={(e) => setGoogleMapsKey(e.target.value)}
-                    className="w-full"
-                  />
-                  <Button type="submit" className="btn-framer-primary w-full">
-                    Initialize Map
-                  </Button>
-                </form>
-                <div className="mt-4 p-4 bg-blue-50 rounded-lg text-sm text-left">
-                  <Info className="h-4 w-4 inline mr-2" />
-                  Get your API key from <a href="https://console.cloud.google.com" target="_blank" rel="noopener noreferrer" className="text-primary underline">Google Cloud Console</a>
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="space-y-8"
-              >
-                {/* Search and Filters */}
-                <div className="glass-effect p-6 rounded-2xl">
-                  <div className="flex flex-col md:flex-row gap-4 items-center">
-                    <div className="relative flex-1">
-                      <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        placeholder="Search by ward name or area..."
-                        className="pl-10"
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">All Wards</Button>
-                      <Button variant="outline" size="sm">High Issues</Button>
-                      <Button variant="outline" size="sm">Low Issues</Button>
-                    </div>
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-8"
+            >
+              {/* Search and Filters */}
+              <div className="glass-effect p-6 rounded-2xl">
+                <div className="flex flex-col md:flex-row gap-4 items-center">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search by ward name or area..."
+                      className="pl-10"
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm">All Wards</Button>
+                    <Button variant="outline" size="sm">High Issues</Button>
+                    <Button variant="outline" size="sm">Low Issues</Button>
                   </div>
                 </div>
+              </div>
 
-                {/* Interactive Map */}
-                <div className="glass-effect p-4 rounded-3xl">
-                  <div 
-                    ref={mapContainer} 
-                    className="w-full h-[600px] rounded-2xl overflow-hidden shadow-lg"
-                  />
-                </div>
+              {/* Interactive Map with 100px border */}
+              <div className="border-[100px] border-background/20 rounded-[200px] overflow-hidden shadow-2xl">
+                <div 
+                  ref={mapContainer} 
+                  className="w-full h-[600px] rounded-[100px] overflow-hidden shadow-lg"
+                />
+              </div>
 
-                {/* Ward Summary */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {wards.map((ward, index) => (
-                    <motion.div
-                      key={ward.id}
-                      initial={{ opacity: 0, y: 40 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1, duration: 0.6 }}
-                      className="glass-effect p-6 rounded-2xl hover:shadow-[var(--shadow-elevated)] transition-all duration-300"
-                    >
-                      <h3 className="font-bold text-lg mb-2">{ward.name}</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Active Issues: <span className="font-semibold text-destructive">{ward.issues}</span>
-                      </p>
-                      <Button variant="outline" size="sm" className="w-full">
-                        View Details
-                      </Button>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
+              {/* Ward Summary */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {wards.map((ward, index) => (
+                  <motion.div
+                    key={ward.id}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1, duration: 0.6 }}
+                    className="glass-effect p-6 rounded-2xl hover:shadow-[var(--shadow-elevated)] transition-all duration-300"
+                  >
+                    <h3 className="font-bold text-lg mb-2">{ward.name}</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Active Issues: <span className="font-semibold text-destructive">{ward.issues}</span>
+                    </p>
+                    <Button variant="outline" size="sm" className="w-full">
+                      View Details
+                    </Button>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </section>
       </main>

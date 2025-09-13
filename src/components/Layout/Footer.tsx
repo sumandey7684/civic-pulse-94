@@ -4,53 +4,62 @@ export const Footer = () => {
   return (
     <footer className="bg-muted/50 border-t border-border">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-4 gap-12 lg:gap-16">
           {/* Brand */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="flex items-center space-x-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg gradient-civic">
-                <Shield className="h-6 w-6 text-white" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl gradient-civic shadow-lg">
+                <Shield className="h-7 w-7 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-foreground">CivicReport</h3>
-                <p className="text-sm text-muted-foreground">SIH 2025 Innovation</p>
+                <h3 className="text-xl font-bold text-foreground">CivicReport</h3>
+                <p className="text-sm text-primary font-medium">SIH 2025 Innovation</p>
               </div>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Empowering citizens and government to collaborate for better communities through technology.
+            <p className="text-base text-muted-foreground leading-relaxed max-w-sm">
+              Empowering citizens and government to collaborate for better communities through innovative technology solutions.
             </p>
           </div>
 
           {/* Platform */}
-          <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Platform</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Report Issue</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Track Issues</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Map Explorer</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Community</a></li>
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h4 className="text-lg font-bold text-foreground tracking-tight">Platform</h4>
+              <div className="w-8 h-0.5 bg-gradient-to-r from-primary to-transparent"></div>
+            </div>
+            <ul className="space-y-3">
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Report Issue</span></a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Track Issues</span></a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Map Explorer</span></a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Community</span></a></li>
             </ul>
           </div>
 
           {/* Support */}
-          <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Support</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Help Center</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">API Documentation</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Admin Portal</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Contact Support</a></li>
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h4 className="text-lg font-bold text-foreground tracking-tight">Support & Resources</h4>
+              <div className="w-8 h-0.5 bg-gradient-to-r from-secondary to-transparent"></div>
+            </div>
+            <ul className="space-y-3">
+              <li><a href="tel:+917735248493" className="text-muted-foreground hover:text-secondary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Help Center</span></a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-secondary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">API Documentation</span></a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-secondary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Admin Portal</span></a></li>
+              <li><a href="tel:+917735248493" className="text-muted-foreground hover:text-secondary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Contact Support</span></a></li>
             </ul>
           </div>
 
           {/* Legal */}
-          <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Legal</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Data Protection</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Accessibility</a></li>
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h4 className="text-lg font-bold text-foreground tracking-tight">Legal & Privacy</h4>
+              <div className="w-8 h-0.5 bg-gradient-to-r from-accent to-transparent"></div>
+            </div>
+            <ul className="space-y-3">
+              <li><a href="/privacy-policy" className="text-muted-foreground hover:text-accent transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Privacy Policy</span></a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Terms of Service</span></a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Data Protection</span></a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Accessibility</span></a></li>
             </ul>
           </div>
         </div>

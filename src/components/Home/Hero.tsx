@@ -80,13 +80,13 @@ export const Hero = () => {
             </motion.div>
             
             <motion.h1 
-              className="text-4xl sm:text-6xl lg:text-8xl font-bold text-foreground mb-8 leading-[0.9]"
+              className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-8 leading-[0.9]"
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.8 }}
             >
               Empowering Citizens,
-              <span className="gradient-hero bg-clip-text text-transparent block">
+              <span className="gradient-hero bg-clip-text text-transparent block text-2xl sm:text-4xl lg:text-5xl xl:text-6xl">
                 Building Communities
               </span>
             </motion.h1>

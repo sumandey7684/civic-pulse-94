@@ -128,7 +128,10 @@ export const CTA = () => {
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
-              <Button className="btn-framer-ghost text-xl px-12 py-8 group">
+              <Button 
+                className="btn-framer-ghost text-xl px-12 py-8 group"
+                onClick={() => window.open('https://wa.me/7735248493', '_blank')}
+              >
                 <Users className="mr-3 h-6 w-6" />
                 Join Community
                 <motion.div

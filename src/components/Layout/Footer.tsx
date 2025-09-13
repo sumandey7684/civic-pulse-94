@@ -42,10 +42,10 @@ export const Footer = () => {
               <div className="w-8 h-0.5 bg-gradient-to-r from-secondary to-transparent"></div>
             </div>
             <ul className="space-y-3">
-              <li><a href="#" className="text-muted-foreground hover:text-secondary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Help Center</span></a></li>
+              <li><a href="tel:+917735248493" className="text-muted-foreground hover:text-secondary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Help Center</span></a></li>
               <li><a href="#" className="text-muted-foreground hover:text-secondary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">API Documentation</span></a></li>
               <li><a href="#" className="text-muted-foreground hover:text-secondary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Admin Portal</span></a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-secondary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Contact Support</span></a></li>
+              <li><a href="tel:+917735248493" className="text-muted-foreground hover:text-secondary transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Contact Support</span></a></li>
             </ul>
           </div>
 
@@ -56,7 +56,7 @@ export const Footer = () => {
               <div className="w-8 h-0.5 bg-gradient-to-r from-accent to-transparent"></div>
             </div>
             <ul className="space-y-3">
-              <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Privacy Policy</span></a></li>
+              <li><a href="/privacy-policy" className="text-muted-foreground hover:text-accent transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Privacy Policy</span></a></li>
               <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Terms of Service</span></a></li>
               <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Data Protection</span></a></li>
               <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors duration-200 text-sm font-medium flex items-center group"><span className="group-hover:translate-x-1 transition-transform duration-200">Accessibility</span></a></li>

@@ -41,31 +41,98 @@ const Dashboard = () => {
 
   // Mock data for demonstration
   const userReports = [
-    {
-      id: 1,
-      title: 'Broken Street Light',
-      location: 'Main Street & 2nd Ave',
-      status: 'resolved',
-      date: '2024-01-15',
-      category: 'Infrastructure'
-    },
-    {
-      id: 2,
-      title: 'Pothole on Highway',
-      location: 'Highway 101 near Mall',
-      status: 'in_progress',
-      date: '2024-01-20',
-      category: 'Roads'
-    },
-    {
-      id: 3,
-      title: 'Illegal Dumping',
-      location: 'Park Avenue',
-      status: 'submitted',
-      date: '2024-01-22',
-      category: 'Environment'
-    }
-  ];
+  {
+    id: 1,
+    title: 'Broken Street Light',
+    location: 'Utkal Hospital road, Chandrasekharpur',
+    status: 'resolved',
+    date: '2025-08-15',
+    category: 'Infrastructure',
+    color: 'green',
+    icon: '✅'
+  },
+  {
+    id: 2,
+    title: 'Pothole on Highway',
+    location: 'Jaydev Vihar Square',
+    status: 'in_progress',
+    date: '2025-07-20',
+    category: 'Roads',
+    color: 'orange',
+    icon: '⚠️'
+  },
+  {
+    id: 3,
+    title: 'Illegal Dumping',
+    location: 'Park Avenue',
+    status: 'submitted',
+    date: '2025-01-22',
+    category: 'Environment',
+    color: 'red',
+    icon: '❌'
+  },
+  {
+    id: 4,
+    title: 'Overflowing Drainage',
+    location: 'Saheed Nagar, near Rama Devi Women’s University',
+    status: 'submitted',
+    date: '2025-03-10',
+    category: 'Sanitation',
+    color: 'red',
+    icon: '❌'
+  },
+  {
+    id: 5,
+    title: 'Damaged Footpath Tiles',
+    location: 'Master Canteen Square',
+    status: 'in_progress',
+    date: '2025-05-02',
+    category: 'Infrastructure',
+    color: 'orange',
+    icon: '⚠️'
+  },
+  {
+    id: 6,
+    title: 'Garbage Not Collected',
+    location: 'Unit-4 Market Area',
+    status: 'resolved',
+    date: '2025-04-18',
+    category: 'Waste Management',
+    color: 'green',
+    icon: '✅'
+  },
+  {
+    id: 7,
+    title: 'Waterlogging after Rain',
+    location: 'Patia Big Bazaar Road',
+    status: 'in_progress',
+    date: '2025-06-25',
+    category: 'Drainage',
+    color: 'orange',
+    icon: '⚠️'
+  },
+  {
+    id: 8,
+    title: 'Unauthorized Parking',
+    location: 'Bapuji Nagar Main Road',
+    status: 'submitted',
+    date: '2025-02-12',
+    category: 'Traffic',
+    color: 'red',
+    icon: '❌'
+  },
+  {
+    id: 9,
+    title: 'Broken Public Bench',
+    location: 'IG Park, near Entry Gate',
+    status: 'resolved',
+    date: '2025-03-28',
+    category: 'Parks',
+    color: 'green',
+    icon: '✅'
+  }
+]
+
 
   const communityStats = [
     { label: 'Total Reports', value: '1,247', icon: FileText, trend: '+12%' },

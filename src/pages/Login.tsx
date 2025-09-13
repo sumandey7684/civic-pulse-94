@@ -1,77 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Header } from "@/components/Layout/Header";
 import { Footer } from "@/components/Layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Shield, Users, Eye, EyeOff, Loader2 } from "lucide-react";
+import { ArrowLeft, Shield, Users, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useAuth } from "@/components/AuthProvider";
-import { toast } from "sonner";
 
-/**
- * Login Component with Supabase Authentication
- * Supports role-based login for citizens and admins
- * Includes proper error handling and redirect functionality
- */
 const Login = () => {
   const navigate = useNavigate();
-  const { signIn, user, loading } = useAuth();
   const [selectedRole, setSelectedRole] = useState<'citizen' | 'admin' | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
 
-  // Redirect authenticated users to dashboard
-  useEffect(() => {
-    if (user) {
-      navigate('/dashboard');
-    }
-  }, [user, navigate]);
-
   const handleRoleSelect = (role: 'citizen' | 'admin') => {
     setSelectedRole(role);
   };
 
-  // Handle form submission with Supabase authentication
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.email || !formData.password) {
-      toast.error('Please fill in all fields');
-      return;
-    }
-
-    setIsSubmitting(true);
-    
-    try {
-      const { error } = await signIn(formData.email, formData.password);
-      
-      if (error) {
-        // Handle specific error types
-        if (error.message.includes('Invalid login credentials')) {
-          toast.error('Invalid email or password. Please try again.');
-        } else if (error.message.includes('Email not confirmed')) {
-          toast.error('Please check your email and confirm your account before signing in.');
-        } else if (error.message.includes('Too many requests')) {
-          toast.error('Too many login attempts. Please wait a moment and try again.');
-        } else {
-          toast.error(error.message || 'An error occurred during sign in');
-        }
-      } else {
-        toast.success('Successfully signed in!');
-        navigate('/dashboard');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      toast.error('An unexpected error occurred. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    // Note: This is frontend only - actual authentication requires Supabase integration
+    console.log('Login attempt:', { role: selectedRole, ...formData });
   };
 
   if (!selectedRole) {
@@ -287,16 +240,8 @@ const Login = () => {
                       type="submit"
                       className={selectedRole === 'citizen' ? 'btn-framer-primary' : 'btn-framer-secondary'}
                       size="lg"
-                      disabled={isSubmitting || loading}
                     >
-                      {isSubmitting || loading ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Signing In...
-                        </>
-                      ) : (
-                        'Sign In'
-                      )}
+                      Sign In
                     </Button>
 
                     <div className="text-center space-y-2">

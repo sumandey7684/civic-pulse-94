@@ -76,7 +76,7 @@ export const Footer = () => {
     visible: {
       y: 0,
       opacity: 1,
-      transition: { type: "spring", stiffness: 150, damping: 25 },
+      transition: { type: "spring" as const, stiffness: 150, damping: 25 },
     },
   };
 
@@ -86,7 +86,7 @@ export const Footer = () => {
       x: 8,
       color: "hsl(var(--primary))",
       textShadow: "0 0 8px hsl(var(--primary)/0.6)",
-      transition: { type: "spring", stiffness: 400, damping: 17 },
+      transition: { type: "spring" as const, stiffness: 400, damping: 17 },
     },
   };
 
@@ -97,7 +97,7 @@ export const Footer = () => {
       rotate: [0, -10, 10, -5, 0],
       y: -4,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 15,
         rotate: { duration: 0.6, ease: "easeInOut" as const },

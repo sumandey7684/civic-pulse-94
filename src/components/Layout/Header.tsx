@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Menu, X, MapPin, Users, Shield, Bell } from "lucide-react";
 import { motion } from "framer-motion";
 import { NotificationDropdown } from "@/components/Notifications/NotificationDropdown";
+import { ThemeToggle } from "@/components/Theme/ThemeToggle";
 
 export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -59,6 +60,9 @@ export const Header = () => {
           <div className="flex items-center space-x-4">
             {/* Notifications */}
             <NotificationDropdown />
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
 
             {/* Login Button */}
             <Button

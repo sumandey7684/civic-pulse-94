@@ -11,7 +11,7 @@ const MapExplorer = () => {
   const navigate = useNavigate();
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<google.maps.Map | null>(null);
-  const googleMapsKey = 'AIzaSyBHANuLiL9wSAB6aLNXbnLzVebSe3TcCQs'; // Hardcoded API key
+  const googleMapsKey = 'AIzaSyAydJVxh0doIQOfAYMM8gZQ2DqgmZthQgM'; // Google Maps API key
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Bhubaneswar coordinates and ward data

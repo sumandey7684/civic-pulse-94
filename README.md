@@ -1,53 +1,57 @@
-# Civic Pulse: Empowering Jharkhand Through Clean and Green Technology
+<p align="center">
+  <img src="banner.png" alt="Project Banner" width="100%" />
+</p>
 
-A web application built with React, TypeScript, and Vite, leveraging shadcn-ui and Tailwind CSS for a modern user interface, designed for SIH 2025 under the theme of Clean and Green Technology for the Government of Jharkhand.
+# 🌱 Civic Pulse: Empowering Jharkhand with Clean & Green Tech ⚡
 
-## Overview
+👉 A web application for SIH 2025, driving sustainability with modern tech! ⚛️🟦⚡
 
-Civic Pulse is a web application designed to **promote and facilitate clean and green initiatives within Jharkhand**. It provides a platform for citizens and government officials to **collaborate on environmental projects, track progress, and access resources related to sustainable development**. This project utilizes a modern tech stack to ensure performance, scalability, and a smooth user experience, aligning with the vision of a cleaner, greener Jharkhand.
+## ✨ Overview
 
-**Repository URL:** [https://github.com/sumandey7684/civic-pulse-94](https://github.com/sumandey7684/civic-pulse-94)
+Civic Pulse is a web application designed to **promote and facilitate clean and green initiatives within Jharkhand**. Built for SIH 2025, it provides a platform for citizens and government officials to **collaborate on environmental projects, track progress 📊, and access resources related to sustainable development**. This project utilizes a modern tech stack (⚛️ React, 🟦 TypeScript, ⚡ Vite) to ensure performance, scalability, and a smooth user experience, aligning with the vision of a cleaner, greener Jharkhand.
 
-## Features
+❤️ **Repository URL:** [https://github.com/sumandey7684/civic-pulse-94](https://github.com/sumandey7684/civic-pulse-94)
 
--   **Modern UI**: Built with shadcn-ui and Tailwind CSS for a sleek and responsive design.
--   **TypeScript**: Ensures type safety and improves code maintainability.
--   **Vite**: Provides fast build times and an optimized development experience.
--   **Environmental Project Tracking**: Allows users to monitor the progress of clean and green initiatives across the state.
--   **Resource Hub**: Provides access to information and resources related to sustainable practices and technologies.
--   **Citizen Engagement**: Enables citizens to participate in environmental projects and provide feedback to the government.
--   **[Add other key features specific to your application that align with the Clean and Green Technology theme]**
+## 🚀 Features
 
-## Technologies Used
+-   🎨 **Modern UI**: Built with shadcn-ui and Tailwind CSS for a sleek and responsive design.
+-   🟦 **TypeScript**: Ensures type safety and improves code maintainability.
+-   ⚡ **Vite**: Provides fast build times and an optimized development experience.
+-   📊 **Environmental Project Tracking**: Allows users to monitor the progress of clean and green initiatives across the state.
+-   📚 **Resource Hub**: Provides access to information and resources related to sustainable practices and technologies.
+-   🤝 **Citizen Engagement**: Enables citizens to participate in environmental projects and provide feedback to the government.
+-   🌱 **[Add other key features specific to your application that align with the Clean and Green Technology theme]**
 
--   [React](https://react.dev/)
--   [TypeScript](https://www.typescriptlang.org/)
--   [Vite](https://vitejs.dev/)
--   [shadcn-ui](https://ui.shadcn.com/)
--   [Tailwind CSS](https://tailwindcss.com/)
--   [Supabase](https://supabase.com/)
--   [Zod](https://zod.dev/)
--   [Radix UI](https://www.radix-ui.com/)
--   [Lucide React](https://lucide.dev/)
--   [Date-fns](https://date-fns.org/)
--   [Framer Motion](https://www.framer.com/motion/)
--   [React Hook Form](https://react-hook-form.com/)
--   [React Day Picker](https://react-day-picker.js.org/)
--   [React Resizable Panels](https://github.com/szhsin/react-resizable-panels)
--   [React Router Dom](https://reactrouter.com/en/main)
--   [Sonner](https://sonner.emilkowal.ski/)
--   [Tailwindcss-animate](https://github.com/jamiebuilds/tailwindcss-animate)
--   [Vaul](https://vaul.emilkowal.ski/)
--   [Class Variance Authority](https://cva.style/)
--   [clsx](https://github.com/lukeed/clsx)
--   [cmdk](https://cmdk.paco.me/)
--   [Embla Carousel React](https://www.embla.design/react)
--   [Input OTP](https://github.com/WebDevSimplified/input-otp)
--   [Next Themes](https://github.com/pacocoursey/next-themes)
--   [React Query](https://tanstack.com/query/latest)
--   [Tailwind Merge](https://github.com/dcastil/tailwind-merge)
+## 🛠️ Technologies Used
 
-## Installation
+-   ⚛️ [React](https://react.dev/)
+-   🟦 [TypeScript](https://www.typescriptlang.org/)
+-   ⚡ [Vite](https://vitejs.dev/)
+-   💎 [shadcn-ui](https://ui.shadcn.com/)
+-   🎉 [Tailwind CSS](https://tailwindcss.com/)
+-   ☁️ [Supabase](https://supabase.com/)
+-   ✅ [Zod](https://zod.dev/)
+-   ⚙️ [Radix UI](https://www.radix-ui.com/)
+-   💡 [Lucide React](https://lucide.dev/)
+-   📅 [Date-fns](https://date-fns.org/)
+-   🎬 [Framer Motion](https://www.framer.com/motion/)
+-   📝 [React Hook Form](https://react-hook-form.com/)
+-   🗓️ [React Day Picker](https://react-day-picker.js.org/)
+-   ↔️ [React Resizable Panels](https://github.com/szhsin/react-resizable-panels)
+-   🗺️ [React Router Dom](https://reactrouter.com/en/main)
+-   🔔 [Sonner](https://sonner.emilkowal.ski/)
+-   💨 [Tailwindcss-animate](https://github.com/jamiebuilds/tailwindcss-animate)
+-   📦 [Vaul](https://vaul.emilkowal.ski/)
+-   ✨ [Class Variance Authority](https://cva.style/)
+-   🧰 [clsx](https://github.com/lukeed/clsx)
+-   ⌨️ [cmdk](https://cmdk.paco.me/)
+-   🎠 [Embla Carousel React](https://www.embla.design/react)
+-   🔑 [Input OTP](https://github.com/WebDevSimplified/input-otp)
+-   🌗 [Next Themes](https://github.com/pacocoursey/next-themes)
+-   📡 [React Query](https://tanstack.com/query/latest)
+-   🧲 [Tailwind Merge](https://github.com/dcastil/tailwind-merge)
+
+## ⚙️ Installation
 
 1.  **Clone the repository:**
 
@@ -96,15 +100,13 @@ Civic Pulse is a web application designed to **promote and facilitate clean and 
 
     This will start the development server with auto-reloading and an instant preview.
 
-## Usage
+## 💻 Usage
 
 Once the development server is running, you can access the application in your browser at `http://localhost:5173`.
 
-[Provide specific instructions on how to use the application, including examples and common use cases. Explain the main features and how users can interact with them, focusing on how the application contributes to clean and green technology initiatives.]
+👉 [Provide specific instructions on how to use the application, including examples and common use cases. Explain the main features and how users can interact with them, focusing on how the application contributes to clean and green technology initiatives.]
 
-## Project Structure
-
-The project structure is organized as follows:
+## 📂 Project Structure
 
 ```
 civic-pulse-94/
@@ -137,7 +139,7 @@ civic-pulse-94/
 └── vite.config.ts          # Vite configuration
 ```
 
-## Contributing
+## ❤️ Contributing
 
 Contributions are welcome! Here's how you can contribute:
 
@@ -154,6 +156,6 @@ Please follow these guidelines when contributing:
 -   Follow the project's coding style.
 -   Ensure your contributions align with the project's goal of promoting clean and green technology.
 
-## License
+## 📜 License  
 
-[Specify the license under which your project is released. If you don't have a license, consider using MIT or Apache 2.0.]
+This project is licensed under the **MIT License** – you are free to use, modify, and distribute it for personal and commercial purposes, provided proper credit is given.  

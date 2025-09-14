@@ -143,7 +143,7 @@ export const CTA = () => {
                 className="btn-framer-ghost text-xl px-12 py-8 group"
                 onClick={() =>
                   window.open(
-                    "https://chat.whatsapp.com/BxE61wb6qNxAFnTZ4GWzgf",
+                    "https://chat.whatsapp.com/L0rzJl06nnGLv1vwvP466G",
                     "_blank"
                   )
                 }

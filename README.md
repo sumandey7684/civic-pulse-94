@@ -14,6 +14,7 @@ Civic Pulse is a web application designed to **promote and facilitate clean and 
 
 ## 🚀 Features
 
+<<<<<<< HEAD
 - 🎨 **Modern UI**: Built with shadcn-ui and Tailwind CSS for a sleek and responsive design.
 - 🟦 **TypeScript**: Ensures type safety and improves code maintainability.
 - ⚡ **Vite**: Provides fast build times and an optimized development experience.
@@ -50,6 +51,44 @@ Civic Pulse is a web application designed to **promote and facilitate clean and 
 - 🌗 [Next Themes](https://github.com/pacocoursey/next-themes)
 - 📡 [React Query](https://tanstack.com/query/latest)
 - 🧲 [Tailwind Merge](https://github.com/dcastil/tailwind-merge)
+=======
+-   🎨 **Modern UI**: Built with shadcn-ui and Tailwind CSS for a sleek and responsive design.
+-   🟦 **TypeScript**: Ensures type safety and improves code maintainability.
+-   ⚡ **Vite**: Provides fast build times and an optimized development experience.
+-   📊 **Environmental Project Tracking**: Allows users to monitor the progress of clean and green initiatives across the state.
+-   📚 **Resource Hub**: Provides access to information and resources related to sustainable practices and technologies.
+-   🤝 **Citizen Engagement**: Enables citizens to participate in environmental projects and provide feedback to the government.
+-   🌱 **[Add other key features specific to your application that align with the Clean and Green Technology theme]**
+
+## 🛠️ Technologies Used
+
+-   ⚛️ [React](https://react.dev/)
+-   🟦 [TypeScript](https://www.typescriptlang.org/)
+-   ⚡ [Vite](https://vitejs.dev/)
+-   💎 [shadcn-ui](https://ui.shadcn.com/)
+-   🎉 [Tailwind CSS](https://tailwindcss.com/)
+-   ☁️ [Supabase](https://supabase.com/)
+-   ✅ [Zod](https://zod.dev/)
+-   ⚙️ [Radix UI](https://www.radix-ui.com/)
+-   💡 [Lucide React](https://lucide.dev/)
+-   📅 [Date-fns](https://date-fns.org/)
+-   🎬 [Framer Motion](https://www.framer.com/motion/)
+-   📝 [React Hook Form](https://react-hook-form.com/)
+-   🗓️ [React Day Picker](https://react-day-picker.js.org/)
+-   ↔️ [React Resizable Panels](https://github.com/szhsin/react-resizable-panels)
+-   🗺️ [React Router Dom](https://reactrouter.com/en/main)
+-   🔔 [Sonner](https://sonner.emilkowal.ski/)
+-   💨 [Tailwindcss-animate](https://github.com/jamiebuilds/tailwindcss-animate)
+-   📦 [Vaul](https://vaul.emilkowal.ski/)
+-   ✨ [Class Variance Authority](https://cva.style/)
+-   🧰 [clsx](https://github.com/lukeed/clsx)
+-   ⌨️ [cmdk](https://cmdk.paco.me/)
+-   🎠 [Embla Carousel React](https://www.embla.design/react)
+-   🔑 [Input OTP](https://github.com/WebDevSimplified/input-otp)
+-   🌗 [Next Themes](https://github.com/pacocoursey/next-themes)
+-   📡 [React Query](https://tanstack.com/query/latest)
+-   🧲 [Tailwind Merge](https://github.com/dcastil/tailwind-merge)
+>>>>>>> 9861ba3e3371d26d3736677aa7363b15df539474
 
 ## ⚙️ Installation
 
@@ -151,6 +190,7 @@ Contributions are welcome! Here's how you can contribute:
 
 Please follow these guidelines when contributing:
 
+<<<<<<< HEAD
 - Write clear, maintainable code.
 - Provide tests for your changes.
 - Follow the project's coding style.
@@ -159,3 +199,13 @@ Please follow these guidelines when contributing:
 ## 📜 License
 
 This project is licensed under the **MIT License** – you are free to use, modify, and distribute it for personal and commercial purposes, provided proper credit is given.
+=======
+-   Write clear, maintainable code.
+-   Provide tests for your changes.
+-   Follow the project's coding style.
+-   Ensure your contributions align with the project's goal of promoting clean and green technology.
+
+## 📜 License  
+
+This project is licensed under the **MIT License** – you are free to use, modify, and distribute it for personal and commercial purposes, provided proper credit is given.  
+>>>>>>> 9861ba3e3371d26d3736677aa7363b15df539474

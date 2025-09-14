@@ -102,40 +102,6 @@ export const Hero = () => {
                 </span>
               </motion.h1>
 
-              {/* CTAs */}
-              <motion.div
-                className="flex flex-col sm:flex-row gap-6 mb-12"
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.5, duration: 0.6 }}
-              >
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Button
-                    className="btn-framer-primary text-lg px-10 py-7"
-                    onClick={handleReportIssue}
-                  >
-                    <Camera className="mr-3 h-6 w-6" />
-                    Report an Issue
-                  </Button>
-                </motion.div>
-
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Button
-                    className="btn-framer-ghost text-lg px-10 py-7"
-                    onClick={handleExploreMap}
-                  >
-                    <MapPin className="mr-3 h-6 w-6" />
-                    Explore Map
-                  </Button>
-                </motion.div>
-              </motion.div>
-
               {/* Role Selection Cards */}
               <motion.div
                 className="grid md:grid-cols-2 gap-8 mt-16"
@@ -165,14 +131,6 @@ export const Hero = () => {
                       <div className="flex items-center">
                         <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
                         Track status of your reports
-                      </div>
-                      <div className="flex items-center">
-                        <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                        View community issues on interactive map
-                      </div>
-                      <div className="flex items-center">
-                        <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                        Receive notifications on issue resolution
                       </div>
                     </div>
                     <Button
@@ -204,15 +162,7 @@ export const Hero = () => {
                       </div>
                       <div className="flex items-center">
                         <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                        Assign issues to relevant departments
-                      </div>
-                      <div className="flex items-center">
-                        <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
                         Track resolution progress and analytics
-                      </div>
-                      <div className="flex items-center">
-                        <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                        Generate reports and insights
                       </div>
                     </div>
                     <Button

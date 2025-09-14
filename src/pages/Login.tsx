@@ -31,6 +31,10 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedRole) {
+      alert("Please choose a role before logging in.");
+      return;
+    }
     // Note: This is frontend only - actual authentication requires Supabase integration
     console.log("Login attempt:", { role: selectedRole, ...formData });
   };
@@ -78,11 +82,11 @@ const Login = () => {
           <section className="py-16">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
               <div className="grid md:grid-cols-2 gap-8">
+                {/* Citizen Card */}
                 <motion.div
                   initial={{ opacity: 0, x: -40 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8 }}
-                  onClick={() => handleRoleSelect("citizen")}
                   className="cursor-pointer"
                 >
                   <Card className="glass-effect border-0 shadow-[var(--shadow-elevated)] hover:shadow-[var(--shadow-glow)] transition-all duration-300 hover:scale-105 h-full">
@@ -103,18 +107,21 @@ const Login = () => {
                         <li>• View community issues on interactive map</li>
                         <li>• Receive notifications on issue resolution</li>
                       </ul>
-                      <Button className="btn-framer-primary w-full mt-6">
+                      <Button
+                        className="btn-framer-primary w-full mt-6"
+                        onClick={() => handleRoleSelect("citizen")}
+                      >
                         Continue as Citizen
                       </Button>
                     </CardContent>
                   </Card>
                 </motion.div>
 
+                {/* Admin Card */}
                 <motion.div
                   initial={{ opacity: 0, x: 40 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8 }}
-                  onClick={() => handleRoleSelect("admin")}
                   className="cursor-pointer"
                 >
                   <Card className="glass-effect border-0 shadow-[var(--shadow-elevated)] hover:shadow-[var(--shadow-glow)] transition-all duration-300 hover:scale-105 h-full">
@@ -137,7 +144,10 @@ const Login = () => {
                         <li>• Track resolution progress and analytics</li>
                         <li>• Generate reports and insights</li>
                       </ul>
-                      <Button className="btn-framer-secondary w-full mt-6">
+                      <Button
+                        className="btn-framer-secondary w-full mt-6"
+                        onClick={() => handleRoleSelect("admin")}
+                      >
                         Continue as Admin
                       </Button>
                     </CardContent>
@@ -217,7 +227,8 @@ const Login = () => {
                   </div>
                   <CardTitle className="text-2xl">Welcome Back</CardTitle>
                   <CardDescription>
-                    Enter your credentials to access your {selectedRole} account
+                    Enter your credentials to access your {selectedRole ?? ""}{" "}
+                    account
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -257,6 +268,9 @@ const Login = () => {
                           type="button"
                           variant="ghost"
                           size="sm"
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
                           className="absolute right-2 top-2 h-6"
                           onClick={() => setShowPassword(!showPassword)}
                         >

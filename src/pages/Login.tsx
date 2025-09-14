@@ -1,37 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Header } from "@/components/Layout/Header";
 import { Footer } from "@/components/Layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { ArrowLeft, Shield, Users, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [selectedRole, setSelectedRole] = useState<'citizen' | 'admin' | null>(null);
+  const [selectedRole, setSelectedRole] = useState<"citizen" | "admin" | null>(
+    null
+  );
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
-  const handleRoleSelect = (role: 'citizen' | 'admin') => {
+  const handleRoleSelect = (role: "citizen" | "admin") => {
     setSelectedRole(role);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Note: This is frontend only - actual authentication requires Supabase integration
-    console.log('Login attempt:', { role: selectedRole, ...formData });
+    console.log("Login attempt:", { role: selectedRole, ...formData });
   };
 
   if (!selectedRole) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        
+
         <main className="pt-20 pb-12">
           <section className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-12">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,14 +51,14 @@ const Login = () => {
               >
                 <Button
                   variant="outline"
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate("/")}
                   className="btn-framer-ghost"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back to Home
                 </Button>
               </motion.div>
-              
+
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -74,7 +82,7 @@ const Login = () => {
                   initial={{ opacity: 0, x: -40 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8 }}
-                  onClick={() => handleRoleSelect('citizen')}
+                  onClick={() => handleRoleSelect("citizen")}
                   className="cursor-pointer"
                 >
                   <Card className="glass-effect border-0 shadow-[var(--shadow-elevated)] hover:shadow-[var(--shadow-glow)] transition-all duration-300 hover:scale-105 h-full">
@@ -84,7 +92,8 @@ const Login = () => {
                       </div>
                       <CardTitle className="text-2xl">Citizen Portal</CardTitle>
                       <CardDescription className="text-base">
-                        Report civic issues, track your submissions, and engage with your community
+                        Report civic issues, track your submissions, and engage
+                        with your community
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -105,7 +114,7 @@ const Login = () => {
                   initial={{ opacity: 0, x: 40 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8 }}
-                  onClick={() => handleRoleSelect('admin')}
+                  onClick={() => handleRoleSelect("admin")}
                   className="cursor-pointer"
                 >
                   <Card className="glass-effect border-0 shadow-[var(--shadow-elevated)] hover:shadow-[var(--shadow-glow)] transition-all duration-300 hover:scale-105 h-full">
@@ -113,9 +122,12 @@ const Login = () => {
                       <div className="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center mx-auto">
                         <Shield className="h-10 w-10 text-secondary" />
                       </div>
-                      <CardTitle className="text-2xl">Admin Dashboard</CardTitle>
+                      <CardTitle className="text-2xl">
+                        Admin Dashboard
+                      </CardTitle>
                       <CardDescription className="text-base">
-                        Manage civic issues, assign tasks, and oversee resolution processes
+                        Manage civic issues, assign tasks, and oversee
+                        resolution processes
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -135,7 +147,7 @@ const Login = () => {
             </div>
           </section>
         </main>
-        
+
         <Footer />
       </div>
     );
@@ -144,7 +156,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="pt-20 pb-12">
         <section className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-12">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -163,7 +175,7 @@ const Login = () => {
                 Change Role
               </Button>
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
@@ -171,10 +183,11 @@ const Login = () => {
               className="text-center"
             >
               <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-4">
-                {selectedRole === 'citizen' ? 'Citizen' : 'Admin'} Login
+                {selectedRole === "citizen" ? "Citizen" : "Admin"} Login
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Sign in to access your {selectedRole === 'citizen' ? 'citizen' : 'admin'} dashboard
+                Sign in to access your{" "}
+                {selectedRole === "citizen" ? "citizen" : "admin"} dashboard
               </p>
             </motion.div>
           </div>
@@ -189,8 +202,14 @@ const Login = () => {
             >
               <Card className="glass-effect border-0 shadow-[var(--shadow-elevated)]">
                 <CardHeader className="text-center space-y-4">
-                  <div className={`w-16 h-16 ${selectedRole === 'citizen' ? 'bg-primary/10' : 'bg-secondary/10'} rounded-full flex items-center justify-center mx-auto`}>
-                    {selectedRole === 'citizen' ? (
+                  <div
+                    className={`w-16 h-16 ${
+                      selectedRole === "citizen"
+                        ? "bg-primary/10"
+                        : "bg-secondary/10"
+                    } rounded-full flex items-center justify-center mx-auto`}
+                  >
+                    {selectedRole === "citizen" ? (
                       <Users className="h-8 w-8 text-primary" />
                     ) : (
                       <Shield className="h-8 w-8 text-secondary" />
@@ -209,7 +228,12 @@ const Login = () => {
                         type="email"
                         placeholder="Enter your email"
                         value={formData.email}
-                        onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            email: e.target.value,
+                          }))
+                        }
                         required
                       />
                     </div>
@@ -221,7 +245,12 @@ const Login = () => {
                           type={showPassword ? "text" : "password"}
                           placeholder="Enter your password"
                           value={formData.password}
-                          onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+                          onChange={(e) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              password: e.target.value,
+                            }))
+                          }
                           required
                         />
                         <Button
@@ -231,14 +260,22 @@ const Login = () => {
                           className="absolute right-2 top-2 h-6"
                           onClick={() => setShowPassword(!showPassword)}
                         >
-                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
                         </Button>
                       </div>
                     </div>
 
                     <Button
                       type="submit"
-                      className={selectedRole === 'citizen' ? 'btn-framer-primary' : 'btn-framer-secondary'}
+                      className={
+                        selectedRole === "citizen"
+                          ? "btn-framer-primary"
+                          : "btn-framer-secondary"
+                      }
                       size="lg"
                     >
                       Sign In
@@ -246,11 +283,11 @@ const Login = () => {
 
                     <div className="text-center space-y-2">
                       <p className="text-sm text-muted-foreground">
-                        Don't have an account?{' '}
+                        Don't have an account?{" "}
                         <button
                           type="button"
                           className="text-primary hover:underline font-medium"
-                          onClick={() => navigate('/signup')}
+                          onClick={() => navigate("/signup")}
                         >
                           Sign up here
                         </button>
@@ -269,7 +306,7 @@ const Login = () => {
           </div>
         </section>
       </main>
-      
+
       <Footer />
     </div>
   );

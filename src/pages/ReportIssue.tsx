@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import axios from "axios";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 // Removed Leaflet imports for Google Maps integration
 import { Header } from "@/components/Layout/Header";
@@ -29,6 +30,7 @@ const ReportIssue = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [visionLoading, setVisionLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -42,7 +44,7 @@ const ReportIssue = () => {
   const mapRef = useRef(null);
 
   // Google Maps API Key
-  const GOOGLE_MAPS_API_KEY = "AIzaSyAydJVxh0doIQOfAYMM8gZQ2DqgmZthQgM";
+  const GOOGLE_MAPS_API_KEY = "AIzaSyDcNoYhpNi1jR5YUIetR2bWVwNnAKUChZk";
 
   // Load Google Maps
   const { isLoaded } = useJsApiLoader({
@@ -73,23 +75,64 @@ const ReportIssue = () => {
     }
   };
 
-  // File upload handler with 100MB limit
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Map categories to Google Vision labels
+  const categoryLabels = {
+    roads: ["road", "street", "highway", "asphalt", "intersection"],
+    water: ["water", "pipe", "faucet", "tap", "leak"],
+    electricity: ["electricity", "power", "pole", "wire", "transformer"],
+    waste: ["garbage", "waste", "trash", "dump", "litter"],
+    streetlights: ["street light", "lamp", "lighting", "pole"],
+    drainage: ["drain", "sewer", "gutter", "pipe", "water"],
+    other: [],
+  };
+
+  // File upload handler with 100MB limit and Google Vision validation
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
     const maxSize = 100 * 1024 * 1024; // 100MB
 
-    const validFiles = files.filter((file) => {
+    for (const file of files) {
       if (file.size > maxSize) {
         toast({
           title: "⚠️ File too large",
           description: `${file.name} exceeds 100MB and was skipped.`,
         });
-        return false;
+        continue;
       }
-      return true;
-    });
-
-    setSelectedFiles((prev) => [...prev, ...validFiles]);
+      setVisionLoading(true);
+      // Convert image to base64
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64data = reader.result?.toString().split(",")[1];
+        // Call Google Vision API
+        try {
+          const visionRes = await axios.post(
+            "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDcNoYhpNi1jR5YUIetR2bWVwNnAKUChZk",
+            {
+              requests: [
+                {
+                  image: { content: base64data },
+                  features: [{ type: "LABEL_DETECTION", maxResults: 10 }],
+                },
+              ],
+            }
+          );
+          const labels = visionRes.data.responses[0]?.labelAnnotations?.map((l: any) => l.description.toLowerCase()) || [];
+          const validLabels = categoryLabels[formData.category] || [];
+          const isValid = validLabels.length === 0 || labels.some(label => validLabels.some(vl => label.includes(vl)));
+          if (isValid) {
+            toast({ title: "✅ Suitable for upload", description: `Photo matches category: ${formData.category}` });
+            setSelectedFiles((prev) => [...prev, file]);
+          } else {
+            toast({ title: "❌ Invalid photo", description: `Photo does not match category: ${formData.category}` });
+          }
+        } catch (err) {
+          toast({ title: "Vision API Error", description: "Could not validate image." });
+        }
+        setVisionLoading(false);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   // Drag & Drop handler

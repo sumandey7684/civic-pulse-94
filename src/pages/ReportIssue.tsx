@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+// Removed Leaflet imports for Google Maps integration
 import { Header } from "@/components/Layout/Header";
 import { Footer } from "@/components/Layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -35,6 +37,41 @@ const ReportIssue = () => {
     location: "",
     priority: "medium",
   });
+  const [markerPosition, setMarkerPosition] = useState<{ lat: number; lng: number } | null>(null);
+  const [manualMode, setManualMode] = useState(false);
+  const mapRef = useRef(null);
+
+  // Google Maps API Key
+  const GOOGLE_MAPS_API_KEY = "AIzaSyAydJVxh0doIQOfAYMM8gZQ2DqgmZthQgM";
+
+  // Load Google Maps
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+  });
+
+  // Get user's location
+  const handleLocateMe = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setMarkerPosition({ lat: latitude, lng: longitude });
+          setFormData((prev) => ({
+            ...prev,
+            location: `${latitude}, ${longitude}`,
+          }));
+          if (mapRef.current) {
+            mapRef.current.panTo({ lat: latitude, lng: longitude });
+          }
+        },
+        () => {
+          toast({ title: "Location Error", description: "Unable to fetch your location." });
+        }
+      );
+    } else {
+      toast({ title: "Geolocation not supported" });
+    }
+  };
 
   // File upload handler with 100MB limit
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -213,7 +250,7 @@ const ReportIssue = () => {
                     {/* Location */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Location</label>
-                      <div className="relative">
+                      <div className="relative mb-2 flex gap-2 items-center">
                         <Input
                           placeholder="Enter location or address"
                           value={formData.location}
@@ -229,14 +266,59 @@ const ReportIssue = () => {
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute right-2 top-2 h-6"
+                          className="h-8"
+                          onClick={handleLocateMe}
+                          title="Use my location"
                         >
                           <MapPin className="h-4 w-4" />
                         </Button>
+                        <Button
+                          type="button"
+                          variant={manualMode ? "default" : "outline"}
+                          size="sm"
+                          className="h-8"
+                          onClick={() => setManualMode((prev) => !prev)}
+                        >
+                          {manualMode ? "Manual Mode On" : "Manual Location"}
+                        </Button>
                       </div>
+                      {/* Google Maps Integration */}
+                      <div className="h-[300px] w-full rounded overflow-hidden border">
+                        {isLoaded && (
+                          <GoogleMap
+                            center={markerPosition || { lat: 20.5937, lng: 78.9629 }}
+                            zoom={markerPosition ? 15 : 5}
+                            mapContainerStyle={{ height: "100%", width: "100%" }}
+                            onLoad={map => { mapRef.current = map; }}
+                            onClick={manualMode ? (e => {
+                              const lat = e.latLng.lat();
+                              const lng = e.latLng.lng();
+                              setMarkerPosition({ lat, lng });
+                              setFormData((prev) => ({ ...prev, location: `${lat}, ${lng}` }));
+                            }) : undefined}
+                          >
+                            {markerPosition && (
+                              <Marker
+                                position={markerPosition}
+                                draggable={manualMode}
+                                onDragEnd={e => {
+                                  const lat = e.latLng.lat();
+                                  const lng = e.latLng.lng();
+                                  setMarkerPosition({ lat, lng });
+                                  setFormData((prev) => ({
+                                    ...prev,
+                                    location: `${lat}, ${lng}`,
+                                  }));
+                                }}
+                              />
+                            )}
+                          </GoogleMap>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">Use the location pin to auto-fill, or enable manual mode to drag/select location on the map.</p>
                     </div>
 
-                    {/* Priority */}
+                    {/* ...existing code... */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium">
                         Priority Level
@@ -261,7 +343,7 @@ const ReportIssue = () => {
                       </Select>
                     </div>
 
-                    {/* Description */}
+                    {/* ...existing code... */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Description</label>
                       <Textarea
@@ -278,7 +360,7 @@ const ReportIssue = () => {
                       />
                     </div>
 
-                    {/* File Upload + Camera */}
+                    {/* ...existing code... */}
                     <div className="space-y-4">
                       <label className="text-sm font-medium">
                         Upload Photos/Videos
@@ -372,7 +454,7 @@ const ReportIssue = () => {
                       )}
                     </div>
 
-                    {/* Submit */}
+                    {/* ...existing code... */}
                     <Button
                       type="submit"
                       className="btn-framer-primary w-full"
@@ -398,6 +480,8 @@ const ReportIssue = () => {
       <Footer />
     </div>
   );
+
+// Removed unused Leaflet helper component
 };
 
 export default ReportIssue;

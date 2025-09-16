@@ -1,5 +1,6 @@
 
 // Node.js Express backend for OTP generation and verification (production-ready)
+require('dotenv').config();
 const express = require('express');
 const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
@@ -12,7 +13,7 @@ app.use(express.json());
 app.use(cors());
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/civicpulse', {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -22,16 +23,16 @@ mongoose.connect('mongodb://localhost:27017/civicpulse', {
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'subhasishrath6@gmail.com', // <-- CHANGE THIS
-    pass: 'subhasishgmail@00',   // <-- CHANGE THIS
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
   },
 });
 
-// Configure Twilio for SMS OTP
-const TWILIO_ACCOUNT_SID = 'ACd7c65c4094a7863d45a7308c95981da6';
-const TWILIO_AUTH_TOKEN = '0bb4193ac5c39e3dfaf77481ff3cabc4';
-const TWILIO_WHATSAPP_NUMBER = 'whatsapp:+14155238886';
-const TWILIO_CONTENT_SID = 'HXb5b62575e6e4ff6129ad7c8efe1f983e';
+// Configure Twilio for SMS/WhatsApp OTP
+const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
+const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
+const TWILIO_WHATSAPP_NUMBER = process.env.TWILIO_WHATSAPP_NUMBER;
+const TWILIO_CONTENT_SID = process.env.TWILIO_CONTENT_SID;
 const twilioClient = require('twilio')(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
 
@@ -69,7 +70,7 @@ app.post('/api/request-otp', async (req, res) => {
   if (email) {
     try {
       await transporter.sendMail({
-        from: 'subhasishrath6@gmail.com',
+  from: process.env.GMAIL_USER,
         to: email,
         subject: 'Your OTP Code',
         text: `Your OTP code is: ${otp}`,

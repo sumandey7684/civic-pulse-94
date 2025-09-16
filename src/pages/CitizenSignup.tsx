@@ -29,7 +29,7 @@ const CitizenSignup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+  <div className="min-h-screen bg-white text-black dark:bg-dark-blue-gradient dark:text-white">
       <Header />
 
       <main className="pt-20 pb-12">

@@ -41,7 +41,6 @@ const MapExplorer = () => {
     // Create global callback function
     (window as any).initMap = () => {
       setIsLoaded(true);
-      
       const mapOptions: google.maps.MapOptions = {
         center: { lat: bhubaneswarCenter[1], lng: bhubaneswarCenter[0] },
         zoom: 11,
@@ -120,7 +119,7 @@ const MapExplorer = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+  <div className="min-h-screen bg-white text-black dark:bg-dark-blue-gradient dark:text-white">
       <Header />
       
       <main className="pt-20">

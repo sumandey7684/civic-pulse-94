@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import axios from "axios";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+// Removed Leaflet imports for Google Maps integration
 import { Header } from "@/components/Layout/Header";
 import { Footer } from "@/components/Layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -24,9 +28,20 @@ import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 
 const ReportIssue = () => {
+  const [issues, setIssues] = useState([]);
+  useEffect(() => {
+    const fetchIssues = async () => {
+      const { data, error } = await (supabase as any)
+        .from("issues")
+        .select("*");
+      if (!error && data) setIssues(data);
+    };
+    fetchIssues();
+  }, []);
   const navigate = useNavigate();
   const { toast } = useToast();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [visionLoading, setVisionLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -35,24 +50,93 @@ const ReportIssue = () => {
     location: "",
     priority: "medium",
   });
+  const [markerPosition, setMarkerPosition] = useState<{ lat: number; lng: number } | null>(null);
+  const [manualMode, setManualMode] = useState(false);
+  const mapRef = useRef(null);
 
-  // File upload handler with 100MB limit
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Google Maps API Key
+  const GOOGLE_MAPS_API_KEY = "AIzaSyDcNoYhpNi1jR5YUIetR2bWVwNnAKUChZk";
+
+  // Load Google Maps
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+  });
+
+  // Get user's location
+  const handleLocateMe = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setMarkerPosition({ lat: latitude, lng: longitude });
+          setFormData((prev) => ({
+            ...prev,
+            location: `${latitude}, ${longitude}`,
+          }));
+          if (mapRef.current) {
+            mapRef.current.panTo({ lat: latitude, lng: longitude });
+          }
+        },
+        () => {
+          toast({ title: "Location Error", description: "Unable to fetch your location." });
+        }
+      );
+    } else {
+      toast({ title: "Geolocation not supported" });
+    }
+  };
+
+  // Map categories to Google Vision labels
+  const categoryLabels = {
+    roads: ["road", "street", "highway", "asphalt", "intersection"],
+    water: ["water", "pipe", "faucet", "tap", "leak"],
+    electricity: ["electricity", "power", "pole", "wire", "transformer"],
+    waste: ["garbage", "waste", "trash", "dump", "litter"],
+    streetlights: ["street light", "lamp", "lighting", "pole"],
+    drainage: ["drain", "sewer", "gutter", "pipe", "water"],
+    other: [],
+  };
+
+  // File upload handler with 100MB limit and Google Vision validation
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
     const maxSize = 100 * 1024 * 1024; // 100MB
 
-    const validFiles = files.filter((file) => {
+    for (const file of files) {
       if (file.size > maxSize) {
         toast({
           title: "⚠️ File too large",
           description: `${file.name} exceeds 100MB and was skipped.`,
         });
-        return false;
+        continue;
       }
-      return true;
-    });
-
-    setSelectedFiles((prev) => [...prev, ...validFiles]);
+      setVisionLoading(true);
+      // Convert image to base64
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64data = reader.result?.toString().split(",")[1];
+        // Call local backend for Google Vision API
+        try {
+          const visionRes = await axios.post(
+            "http://localhost:5000/vision",
+            { imageBase64: base64data }
+          );
+          const labels = visionRes.data.map((l) => l.description.toLowerCase()) || [];
+          const validLabels = categoryLabels[formData.category] || [];
+          const isValid = validLabels.length === 0 || labels.some(label => validLabels.some(vl => label.includes(vl)));
+          if (isValid) {
+            toast({ title: "✅ Suitable for upload", description: `Photo matches category: ${formData.category}` });
+            setSelectedFiles((prev) => [...prev, file]);
+          } else {
+            toast({ title: "❌ Invalid photo", description: `Photo does not match category: ${formData.category}` });
+          }
+        } catch (err) {
+          toast({ title: "Vision API Error", description: "Could not validate image." });
+        }
+        setVisionLoading(false);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   // Drag & Drop handler
@@ -102,10 +186,30 @@ const ReportIssue = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+  <div className="min-h-screen bg-white text-black dark:bg-dark-blue-gradient dark:text-white">
       <Header />
-
       <main className="pt-20 pb-12">
+        <div className="container mx-auto px-4 py-8">
+          <h2 className="text-2xl font-bold mb-4">Reported Issues</h2>
+          <div className="space-y-4 mb-8">
+            {issues.length === 0 ? (
+              <div className="text-muted-foreground">No issues reported yet.</div>
+            ) : (
+              issues.map((issue) => (
+                <div key={issue.id} className="border rounded p-4 bg-card">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-semibold">{issue.title}</span>
+                    <span className="text-xs px-2 py-1 rounded bg-muted">{issue.status}</span>
+                  </div>
+                  <div className="text-sm text-muted-foreground mb-1">Category: {issue.category}</div>
+                  <div className="text-sm text-muted-foreground mb-1">Location: {issue.location}</div>
+                  <div className="text-sm text-muted-foreground mb-1">Priority: {issue.priority}</div>
+                  <div className="text-sm text-muted-foreground">Description: {issue.description}</div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
         <section className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-12">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -213,7 +317,7 @@ const ReportIssue = () => {
                     {/* Location */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Location</label>
-                      <div className="relative">
+                      <div className="relative mb-2 flex gap-2 items-center">
                         <Input
                           placeholder="Enter location or address"
                           value={formData.location}
@@ -229,14 +333,59 @@ const ReportIssue = () => {
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute right-2 top-2 h-6"
+                          className="h-8"
+                          onClick={handleLocateMe}
+                          title="Use my location"
                         >
                           <MapPin className="h-4 w-4" />
                         </Button>
+                        <Button
+                          type="button"
+                          variant={manualMode ? "default" : "outline"}
+                          size="sm"
+                          className="h-8"
+                          onClick={() => setManualMode((prev) => !prev)}
+                        >
+                          {manualMode ? "Manual Mode On" : "Manual Location"}
+                        </Button>
                       </div>
+                      {/* Google Maps Integration */}
+                      <div className="h-[300px] w-full rounded overflow-hidden border">
+                        {isLoaded && (
+                          <GoogleMap
+                            center={markerPosition || { lat: 20.5937, lng: 78.9629 }}
+                            zoom={markerPosition ? 15 : 5}
+                            mapContainerStyle={{ height: "100%", width: "100%" }}
+                            onLoad={map => { mapRef.current = map; }}
+                            onClick={manualMode ? (e => {
+                              const lat = e.latLng.lat();
+                              const lng = e.latLng.lng();
+                              setMarkerPosition({ lat, lng });
+                              setFormData((prev) => ({ ...prev, location: `${lat}, ${lng}` }));
+                            }) : undefined}
+                          >
+                            {markerPosition && (
+                              <Marker
+                                position={markerPosition}
+                                draggable={manualMode}
+                                onDragEnd={e => {
+                                  const lat = e.latLng.lat();
+                                  const lng = e.latLng.lng();
+                                  setMarkerPosition({ lat, lng });
+                                  setFormData((prev) => ({
+                                    ...prev,
+                                    location: `${lat}, ${lng}`,
+                                  }));
+                                }}
+                              />
+                            )}
+                          </GoogleMap>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">Use the location pin to auto-fill, or enable manual mode to drag/select location on the map.</p>
                     </div>
 
-                    {/* Priority */}
+                    {/* ...existing code... */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium">
                         Priority Level
@@ -261,7 +410,7 @@ const ReportIssue = () => {
                       </Select>
                     </div>
 
-                    {/* Description */}
+                    {/* ...existing code... */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Description</label>
                       <Textarea
@@ -278,7 +427,7 @@ const ReportIssue = () => {
                       />
                     </div>
 
-                    {/* File Upload + Camera */}
+                    {/* ...existing code... */}
                     <div className="space-y-4">
                       <label className="text-sm font-medium">
                         Upload Photos/Videos
@@ -372,7 +521,7 @@ const ReportIssue = () => {
                       )}
                     </div>
 
-                    {/* Submit */}
+                    {/* ...existing code... */}
                     <Button
                       type="submit"
                       className="btn-framer-primary w-full"
@@ -398,6 +547,8 @@ const ReportIssue = () => {
       <Footer />
     </div>
   );
+
+// Removed unused Leaflet helper component
 };
 
 export default ReportIssue;

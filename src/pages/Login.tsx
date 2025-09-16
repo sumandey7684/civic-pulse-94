@@ -251,7 +251,7 @@ const Login = () => {
       if (selectedRole === "admin") {
         navigate("/admin");
       } else {
-        navigate("/citizen");
+        navigate("/account");
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -790,7 +790,7 @@ const Login = () => {
 
   // -------- LOGIN FORM --------
   return (
-    <div className="min-h-screen bg-background">
+  <div className="min-h-screen bg-white text-black dark:bg-dark-blue-gradient dark:text-white">
       <Header />
       <main className="pt-20 pb-12">
         <section className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-12">
@@ -918,17 +918,27 @@ const Login = () => {
                     </div>
                   )}
 
-                  <Button
-                    type="submit"
-                    className={
-                      selectedRole === "citizen"
-                        ? "btn-framer-primary w-full"
-                        : "btn-framer-secondary w-full"
-                    }
-                    disabled={loading}
-                  >
-                    {loading ? "Signing In..." : "Sign In"}
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      type="submit"
+                      className={
+                        selectedRole === "citizen"
+                          ? "btn-framer-primary w-full"
+                          : "btn-framer-secondary w-full"
+                      }
+                      disabled={loading}
+                    >
+                      {loading ? "Signing In..." : "Sign In"}
+                    </Button>
+                    <Button
+                      type="button"
+                      className="btn-framer-outline w-full"
+                      onClick={() => navigate("/account")}
+                      disabled={loading}
+                    >
+                      Account
+                    </Button>
+                  </div>
 
                   <div className="text-center space-y-2">
                     <p className="text-sm text-muted-foreground">

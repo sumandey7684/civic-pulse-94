@@ -4,10 +4,11 @@ import { Hero } from "@/components/Home/Hero";
 import { FeatureCards } from "@/components/Home/FeatureCards";
 import { Stats } from "@/components/Home/Stats";
 import { CTA } from "@/components/Home/CTA";
+import Chatbot from "@/components/Home/Chatbot";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white text-black dark:bg-dark-blue-gradient dark:text-white">
       <Header />
       <main>
         <Hero />
@@ -15,6 +16,7 @@ const Index = () => {
         <Stats />
         <CTA />
       </main>
+      <Chatbot />
       <Footer />
     </div>
   );

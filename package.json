@@ -51,11 +51,8 @@
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.6.0",
-<<<<<<< HEAD
-    "firebase": "^12.2.1",
-=======
     "express": "^5.1.0",
->>>>>>> 587fce1394e5e013834de2ecbbd1f66d74f42479
+    "firebase": "^12.2.1",
     "framer-motion": "^12.23.12",
     "input-otp": "^1.4.2",
     "leaflet": "^1.9.4",
@@ -67,7 +64,7 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.61.1",
-    "react-leaflet": "^5.0.0",
+    "react-leaflet": "^4.2.1",
     "react-resizable-panels": "^2.1.9",
     "react-router-dom": "^6.30.1",
     "sonner": "^1.7.4",

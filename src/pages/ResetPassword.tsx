@@ -9,7 +9,8 @@ import { requestOtp, verifyOtp } from "@/lib/otpApi";
 
 const ResetPassword = () => {
   const [step, setStep] = useState(1);
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
+  const [isPhone, setIsPhone] = useState(false);
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,12 +24,12 @@ const ResetPassword = () => {
     setError("");
     setSuccess("");
     setPreviewUrl("");
-    const res = await requestOtp(email);
+    const res = await requestOtp(identifier, isPhone);
     if (res.error) {
       setError(res.error);
     } else {
       setStep(2);
-      setSuccess("OTP sent to your email. Please check your inbox.");
+      setSuccess(isPhone ? "OTP sent to your phone." : "OTP sent to your email. Please check your inbox.");
       if (res.previewUrl) setPreviewUrl(res.previewUrl);
     }
     setLoading(false);
@@ -40,7 +41,7 @@ const ResetPassword = () => {
     setError("");
     setSuccess("");
     // Step 1: Verify OTP via backend
-    const res = await verifyOtp(email, otp);
+    const res = await verifyOtp(identifier, otp);
     if (res.error) {
       setError(res.error);
       setLoading(false);
@@ -71,14 +72,26 @@ const ResetPassword = () => {
                 onSubmit={e => { e.preventDefault(); handleSendOtp(); }}
                 className="space-y-6"
               >
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required
-                  disabled={loading}
-                />
+                <div className="space-y-2">
+                  <Input
+                    type={isPhone ? "tel" : "email"}
+                    placeholder={isPhone ? "Enter your phone number" : "Enter your email"}
+                    value={identifier}
+                    onChange={e => setIdentifier(e.target.value)}
+                    required
+                    disabled={loading}
+                  />
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={isPhone}
+                      onChange={e => setIsPhone(e.target.checked)}
+                      id="isPhone"
+                      disabled={loading}
+                    />
+                    <label htmlFor="isPhone" className="text-sm">Use phone instead of email</label>
+                  </div>
+                </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Sending OTP..." : "Send OTP"}
                 </Button>

@@ -24,23 +24,34 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate submission delay
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const res = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        toast({
+          title: "Message sent successfully!",
+          description: "We'll get back to you within 24 hours.",
+        });
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        toast({
+          title: "Failed to send message",
+          description: data.error || "Please try again later.",
+          variant: "destructive"
+        });
+      }
+    } catch (err: any) {
       toast({
-        title: "Message sent successfully!",
-        description: "We'll get back to you within 24 hours.",
+        title: "Failed to send message",
+        description: err.message || "Please try again later.",
+        variant: "destructive"
       });
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
-    }, 2000);
+    }
+    setIsSubmitting(false);
   };
 
   return (

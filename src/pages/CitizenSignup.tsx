@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-// src/pages/CitizenSignup.tsx
-import React, { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
-=======
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Layout/Header";
@@ -17,65 +12,16 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { ArrowLeft, Users } from "lucide-react";
->>>>>>> 587fce1394e5e013834de2ecbbd1f66d74f42479
 import { useNavigate } from "react-router-dom";
 
-export default function CitizenSignup() {
-  const { register } = useAuth();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const [error, setError] = useState<string | null>(null);
+const CitizenSignup = () => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-<<<<<<< HEAD
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    if (password !== confirm) return setError("Passwords do not match");
-    try {
-      await register(name, email, password, "citizen");
-      navigate("/verify-notice"); // or /dashboard
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <h2>Citizen Sign up</h2>
-      {error && <div>{error}</div>}
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Full name"
-        required
-      />
-      <input
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        type="email"
-        required
-      />
-      <input
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        type="password"
-        required
-      />
-      <input
-        value={confirm}
-        onChange={(e) => setConfirm(e.target.value)}
-        placeholder="Confirm password"
-        type="password"
-        required
-      />
-      <button type="submit">Sign up</button>
-    </form>
-=======
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -168,6 +114,7 @@ export default function CitizenSignup() {
 
       <Footer />
     </div>
->>>>>>> 587fce1394e5e013834de2ecbbd1f66d74f42479
   );
-}
+};
+
+export default CitizenSignup;

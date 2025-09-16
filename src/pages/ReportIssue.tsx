@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import axios from "axios";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 // Removed Leaflet imports for Google Maps integration
@@ -27,6 +28,16 @@ import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 
 const ReportIssue = () => {
+  const [issues, setIssues] = useState([]);
+  useEffect(() => {
+    const fetchIssues = async () => {
+      const { data, error } = await (supabase as any)
+        .from("issues")
+        .select("*");
+      if (!error && data) setIssues(data);
+    };
+    fetchIssues();
+  }, []);
   const navigate = useNavigate();
   const { toast } = useToast();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -104,20 +115,13 @@ const ReportIssue = () => {
       const reader = new FileReader();
       reader.onloadend = async () => {
         const base64data = reader.result?.toString().split(",")[1];
-        // Call Google Vision API
+        // Call local backend for Google Vision API
         try {
           const visionRes = await axios.post(
-            "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDcNoYhpNi1jR5YUIetR2bWVwNnAKUChZk",
-            {
-              requests: [
-                {
-                  image: { content: base64data },
-                  features: [{ type: "LABEL_DETECTION", maxResults: 10 }],
-                },
-              ],
-            }
+            "http://localhost:5000/vision",
+            { imageBase64: base64data }
           );
-          const labels = visionRes.data.responses[0]?.labelAnnotations?.map((l: any) => l.description.toLowerCase()) || [];
+          const labels = visionRes.data.map((l) => l.description.toLowerCase()) || [];
           const validLabels = categoryLabels[formData.category] || [];
           const isValid = validLabels.length === 0 || labels.some(label => validLabels.some(vl => label.includes(vl)));
           if (isValid) {
@@ -184,8 +188,28 @@ const ReportIssue = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-
       <main className="pt-20 pb-12">
+        <div className="container mx-auto px-4 py-8">
+          <h2 className="text-2xl font-bold mb-4">Reported Issues</h2>
+          <div className="space-y-4 mb-8">
+            {issues.length === 0 ? (
+              <div className="text-muted-foreground">No issues reported yet.</div>
+            ) : (
+              issues.map((issue) => (
+                <div key={issue.id} className="border rounded p-4 bg-card">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-semibold">{issue.title}</span>
+                    <span className="text-xs px-2 py-1 rounded bg-muted">{issue.status}</span>
+                  </div>
+                  <div className="text-sm text-muted-foreground mb-1">Category: {issue.category}</div>
+                  <div className="text-sm text-muted-foreground mb-1">Location: {issue.location}</div>
+                  <div className="text-sm text-muted-foreground mb-1">Priority: {issue.priority}</div>
+                  <div className="text-sm text-muted-foreground">Description: {issue.description}</div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
         <section className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-12">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div

@@ -251,7 +251,7 @@ const Login = () => {
       if (selectedRole === "admin") {
         navigate("/admin");
       } else {
-        navigate("/citizen");
+        navigate("/account");
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -918,17 +918,27 @@ const Login = () => {
                     </div>
                   )}
 
-                  <Button
-                    type="submit"
-                    className={
-                      selectedRole === "citizen"
-                        ? "btn-framer-primary w-full"
-                        : "btn-framer-secondary w-full"
-                    }
-                    disabled={loading}
-                  >
-                    {loading ? "Signing In..." : "Sign In"}
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      type="submit"
+                      className={
+                        selectedRole === "citizen"
+                          ? "btn-framer-primary w-full"
+                          : "btn-framer-secondary w-full"
+                      }
+                      disabled={loading}
+                    >
+                      {loading ? "Signing In..." : "Sign In"}
+                    </Button>
+                    <Button
+                      type="button"
+                      className="btn-framer-outline w-full"
+                      onClick={() => navigate("/account")}
+                      disabled={loading}
+                    >
+                      Account
+                    </Button>
+                  </div>
 
                   <div className="text-center space-y-2">
                     <p className="text-sm text-muted-foreground">

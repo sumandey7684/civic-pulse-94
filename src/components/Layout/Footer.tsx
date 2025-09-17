@@ -37,9 +37,13 @@ const footerLinks = {
 
 const socialLinks = [
   { Icon: Facebook, color: "blue", href: "#" },
-  { Icon: Twitter, color: "sky", href: "#" },
-  { Icon: Linkedin, color: "blue", href: "#" },
-  { Icon: Github, color: "slate", href: "#" },
+  { Icon: Twitter, color: "sky", href: "https://www.x.com/sumxnnn" },
+  {
+    Icon: Linkedin,
+    color: "blue",
+    href: "https://www.linkedin.com/in/sumandey7684",
+  },
+  { Icon: Github, color: "slate", href: "https://www.github.com/sumandey7684" },
   { Icon: Mail, color: "red", href: "#" },
 ];
 
@@ -100,7 +104,7 @@ export const Footer = () => {
         type: "spring" as const,
         stiffness: 300,
         damping: 15,
-        rotate: { duration: 0.6, ease: "easeInOut" as const },
+        rotate: { duration: 0.4, ease: "easeInOut" as const },
       },
     },
   };
@@ -158,7 +162,7 @@ export const Footer = () => {
                 </motion.div>
                 <div>
                   <h3 className="text-2xl font-bold text-foreground">
-                    CivicReport
+                    Civic Report
                   </h3>
                   <p className="text-sm text-primary font-medium">
                     SIH 2025 Innovation
@@ -252,7 +256,7 @@ export const Footer = () => {
               rights reserved.
             </p>
             <p className="text-xs text-muted-foreground/70 mt-1">
-              Developed with ❤️ for better governance
+              Developed by Team Technophiles with ❤️ for better governance
             </p>
           </div>
 

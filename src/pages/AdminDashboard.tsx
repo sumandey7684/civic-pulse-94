@@ -61,49 +61,58 @@ const stats = [
 const initialIssues = [
   {
     id: "ISS-001",
-    title: "Broken street light on MG Road",
+    title: "Broken street light near Ram Mandir Square",
     description:
-      "Street light has been non-functional for 3 days causing safety concerns",
-    location: "MG Road, Sector 15",
+      "Street light has been non-functional for 3 days, causing safety concerns for pedestrians and commuters at night.",
+    location: "Ram Mandir Square, Bhubaneswar",
     category: "Infrastructure",
     priority: "High",
     status: "In Progress",
+    citizenName: "Satyajit Das",
   },
   {
     id: "ISS-002",
-    title: "Pothole near bus stop",
-    description: "Large pothole causing traffic issues and vehicle damage",
-    location: "Bus Stop, Park Street",
+    title: "Pothole near Master Canteen Bus Stop",
+    description:
+      "Large pothole creating traffic congestion and damaging vehicles near Master Canteen area.",
+    location: "Master Canteen, Bhubaneswar",
     category: "Road",
     priority: "Critical",
     status: "Pending",
+    citizenName: "Subhasmita Nayak",
   },
   {
     id: "ISS-003",
-    title: "Garbage collection delayed",
-    description: "Waste has not been collected for 2 days in residential area",
-    location: "Residential Block A",
+    title: "Garbage not collected in Saheed Nagar",
+    description:
+      "Household waste has not been collected for 2 days in Lane-4 of Saheed Nagar residential colony.",
+    location: "Saheed Nagar, Lane-4, Bhubaneswar",
     category: "Sanitation",
     priority: "Medium",
     status: "Resolved",
+    citizenName: "Rakesh Pradhan",
   },
   {
     id: "ISS-004",
-    title: "Water leakage in public park",
-    description: "Water pipe burst causing flooding in park area",
-    location: "Central Park",
+    title: "Water leakage in Ekamra Kanan Park",
+    description:
+      "Pipe burst leading to flooding and water wastage inside Ekamra Kanan Botanical Garden.",
+    location: "Ekamra Kanan, Nayapalli, Bhubaneswar",
     category: "Water",
     priority: "High",
     status: "In Progress",
+    citizenName: "Ananya Mohanty",
   },
   {
     id: "ISS-005",
-    title: "Noise pollution from construction",
-    description: "Construction work exceeding permitted noise levels",
-    location: "Commercial District",
+    title: "Noise pollution from construction near KIIT Square",
+    description:
+      "Overnight construction work exceeding noise limits disturbing nearby residents and students.",
+    location: "KIIT Square, Patia, Bhubaneswar",
     category: "Environment",
     priority: "Low",
     status: "Pending",
+    citizenName: "Debasish Rout",
   },
 ];
 

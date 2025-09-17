@@ -790,7 +790,7 @@ const Login = () => {
 
   // -------- LOGIN FORM --------
   return (
-  <div className="min-h-screen bg-white text-black dark:bg-dark-blue-gradient dark:text-white">
+    <div className="min-h-screen bg-background">
       <Header />
       <main className="pt-20 pb-12">
         <section className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-12">

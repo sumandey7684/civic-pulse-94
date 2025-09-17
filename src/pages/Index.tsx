@@ -1,22 +1,31 @@
-
+import { useEffect } from "react";
 import { Header } from "@/components/Layout/Header";
 import { Footer } from "@/components/Layout/Footer";
 import { Hero } from "@/components/Home/Hero";
 import { FeatureCards } from "@/components/Home/FeatureCards";
 import { Stats } from "@/components/Home/Stats";
 import { CTA } from "@/components/Home/CTA";
-import Chatbot from "@/components/Home/Chatbot";
-import Dashboard from "@/components/Dashboard";
-
-
-// Dummy user and civicCoins for demo; replace with real auth and coin logic
-const user = { name: "Citizen User", email: "citizen@example.com" };
-const civicCoins = 42;
 
 const Index = () => {
+  useEffect(() => {
+    const v = document.createElement('script');
+    v.type = 'text/javascript';
+    v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs';
+    v.onload = function() {
+      window.voiceflow?.chat?.load?.({
+        verify: { projectID: '68cac8dcd4b73f0bb0898a68' },
+        url: 'https://general-runtime.voiceflow.com',
+        versionID: 'production',
+        voice: { url: 'https://runtime-api.voiceflow.com' }
+      });
+    };
+    document.body.appendChild(v);
+    return () => {
+      document.body.removeChild(v);
+    };
+  }, []);
   return (
-    <div className="min-h-screen bg-white text-black dark:bg-dark-blue-gradient dark:text-white">
-  {/* Dashboard is now only available on the dedicated page after login/signup. */}
+    <div className="min-h-screen bg-background">
       <Header />
       <main>
         <Hero />
@@ -24,7 +33,6 @@ const Index = () => {
         <Stats />
         <CTA />
       </main>
-      <Chatbot />
       <Footer />
     </div>
   );

@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,8 +10,6 @@ import {
   AlertCircle,
   CheckCircle,
   Clock,
-  Settings,
-  FileText,
   TrendingUp,
   Filter,
   Search,
@@ -21,236 +17,645 @@ import {
   Eye,
   Edit,
   Archive,
+  Sparkles,
+  Zap,
 } from "lucide-react";
 import { Header } from "@/components/Layout/Header";
 import { Footer } from "@/components/Layout/Footer";
 
-// --- Helpers ---
+const stats = [
+  {
+    title: "Total Issues",
+    value: "1,247",
+    change: "+12%",
+    icon: AlertCircle,
+    bgColor: "bg-gradient-to-br from-blue-100 to-blue-50",
+    color: "text-blue-600",
+  },
+  {
+    title: "Active Users",
+    value: "892",
+    change: "+8%",
+    icon: Users,
+    bgColor: "bg-gradient-to-br from-green-100 to-green-50",
+    color: "text-green-600",
+  },
+  {
+    title: "Resolved Today",
+    value: "34",
+    change: "+25%",
+    icon: CheckCircle,
+    bgColor: "bg-gradient-to-br from-purple-100 to-purple-50",
+    color: "text-purple-600",
+  },
+  {
+    title: "Avg Response",
+    value: "2.3h",
+    change: "-15%",
+    icon: Clock,
+    bgColor: "bg-gradient-to-br from-orange-100 to-orange-50",
+    color: "text-orange-600",
+  },
+];
+
+const initialIssues = [
+  {
+    id: "ISS-001",
+    title: "Broken street light on MG Road",
+    description:
+      "Street light has been non-functional for 3 days causing safety concerns",
+    location: "MG Road, Sector 15",
+    category: "Infrastructure",
+    priority: "High",
+    status: "In Progress",
+  },
+  {
+    id: "ISS-002",
+    title: "Pothole near bus stop",
+    description: "Large pothole causing traffic issues and vehicle damage",
+    location: "Bus Stop, Park Street",
+    category: "Road",
+    priority: "Critical",
+    status: "Pending",
+  },
+  {
+    id: "ISS-003",
+    title: "Garbage collection delayed",
+    description: "Waste has not been collected for 2 days in residential area",
+    location: "Residential Block A",
+    category: "Sanitation",
+    priority: "Medium",
+    status: "Resolved",
+  },
+  {
+    id: "ISS-004",
+    title: "Water leakage in public park",
+    description: "Water pipe burst causing flooding in park area",
+    location: "Central Park",
+    category: "Water",
+    priority: "High",
+    status: "In Progress",
+  },
+  {
+    id: "ISS-005",
+    title: "Noise pollution from construction",
+    description: "Construction work exceeding permitted noise levels",
+    location: "Commercial District",
+    category: "Environment",
+    priority: "Low",
+    status: "Pending",
+  },
+];
+
+// Animated glassmorphism background
+const AnimatedBackground = () => (
+  <div className="fixed inset-0 -z-10 overflow-hidden">
+    <div className="absolute -top-40 -right-32 w-80 h-80 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-500/20 blur-3xl animate-pulse"></div>
+    <div
+      className="absolute -bottom-40 -left-32 w-80 h-80 rounded-full bg-gradient-to-tr from-pink-400/20 to-orange-500/20 blur-3xl animate-pulse"
+      style={{ animationDelay: "2s" }}
+    ></div>
+    <div
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-gradient-to-r from-cyan-400/10 to-blue-500/10 blur-3xl animate-pulse"
+      style={{ animationDelay: "4s" }}
+    ></div>
+  </div>
+);
+
 const getPriorityColor = (priority: string) => {
   switch (priority) {
-    case "Critical": return "bg-red-100 text-red-600";
-    case "High": return "bg-orange-100 text-orange-600";
-    case "Medium": return "bg-yellow-100 text-yellow-600";
-    case "Low": return "bg-green-100 text-green-600";
-    default: return "bg-gray-100 text-gray-600";
+    case "Critical":
+      return "bg-gradient-to-r from-red-100 to-red-50 text-red-700 border-red-300";
+    case "High":
+      return "bg-gradient-to-r from-orange-100 to-orange-50 text-orange-700 border-orange-300";
+    case "Medium":
+      return "bg-gradient-to-r from-yellow-100 to-yellow-50 text-yellow-700 border-yellow-200";
+    case "Low":
+      return "bg-gradient-to-r from-green-100 to-green-50 text-green-700 border-green-200";
+    default:
+      return "bg-gradient-to-r from-gray-100 to-gray-50 text-gray-700 border-gray-300";
   }
 };
-
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "Pending": return "bg-orange-100 text-orange-600";
-    case "In Progress": return "bg-blue-100 text-blue-600";
-    case "Resolved": return "bg-green-100 text-green-600";
-    default: return "bg-gray-100 text-gray-600";
+    case "Pending":
+      return "bg-gradient-to-r from-orange-100 to-orange-50 text-orange-700 border-orange-200";
+    case "In Progress":
+      return "bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 border-blue-200";
+    case "Resolved":
+      return "bg-gradient-to-r from-green-100 to-green-50 text-green-700 border-green-200";
+    default:
+      return "bg-gradient-to-r from-gray-100 to-gray-50 text-gray-700 border-gray-300";
   }
 };
+const getPriorityEmoji = (priority: string) =>
+  ({
+    Critical: "🚨",
+    High: "⚠️",
+    Medium: "📋",
+    Low: "✅",
+  }[priority] || "📋");
+const getStatusEmoji = (status: string) =>
+  ({
+    Pending: "⏳",
+    "In Progress": "🔄",
+    Resolved: "✅",
+  }[status] || "⏳");
 
 const AdminDashboard = () => {
-  const [users, setUsers] = useState([]);
-  const [allIssues, setAllIssues] = useState([]);
-  const [filteredIssues, setFilteredIssues] = useState([]);
+  const [allIssues, setAllIssues] = useState(initialIssues);
+  const [filteredIssues, setFilteredIssues] = useState(initialIssues);
   const [visibleCount, setVisibleCount] = useState(5);
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [editingIssue, setEditingIssue] = useState(null);
-  const stats = [];
-  // TODO: Fill stats and fetch users/issues as needed
+  const [editingIssue, setEditingIssue] = useState<any>(null);
+
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+  const [selectedPriority, setSelectedPriority] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+
+  useEffect(() => {
+    setFilteredIssues(allIssues);
+  }, [allIssues]);
 
   const handleSearch = () => {
-    // TODO: Implement search logic
+    if (!searchTerm.trim()) {
+      setFilteredIssues(allIssues);
+      return;
+    }
+    const filtered = allIssues.filter(
+      (issue) =>
+        issue.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        issue.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        issue.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredIssues(filtered);
   };
-  const handleFilter = (type, value) => {
-    // TODO: Implement filter logic
+
+  const handleDropdownFilter = () => {
+    let filtered = allIssues;
+    if (selectedPriority) {
+      filtered = filtered.filter(
+        (issue) => issue.priority === selectedPriority
+      );
+    }
+    if (selectedStatus) {
+      filtered = filtered.filter((issue) => issue.status === selectedStatus);
+    }
+    setFilteredIssues(filtered);
+    setShowFilterDropdown(false);
+  };
+
+  const clearFilters = () => {
+    setFilteredIssues(allIssues);
+    setSelectedPriority("");
+    setSelectedStatus("");
+    setSearchTerm("");
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative">
+      <AnimatedBackground />
       <Header />
-      <main>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <main className="container mx-auto px-6 py-8">
+        {/* Modern Stats Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-12 text-center"
+        >
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+            Admin Dashboard
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Civic issue tracking with smart data and engaging visuals
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {stats.map((stat, index) => (
-            <Card key={index} className="glass-effect hover-lift">
-              <CardContent className="p-6 flex justify-between items-center">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{stat.title}</p>
-                  <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-                  <div className="flex items-center mt-1">
-                    <TrendingUp className="w-3 h-3 text-green-500 mr-1" />
-                    <span className="text-xs text-green-600">{stat.change}</span>
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ scale: 1.05, rotate: 2 }}
+            >
+              <Card
+                className={`relative overflow-hidden backdrop-blur-xl bg-white/80 border-0 shadow-xl hover:shadow-2xl transition-all duration-500`}
+              >
+                <CardContent className="p-8 relative z-10">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">
+                        {stat.title}
+                      </p>
+                      <motion.p
+                        className="text-3xl font-bold text-gray-900"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: index * 0.1 + 0.15 }}
+                      >
+                        {stat.value}
+                      </motion.p>
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="w-4 h-4 text-emerald-500" />
+                        <span className="text-sm font-semibold text-emerald-600">
+                          {stat.change}
+                        </span>
+                      </div>
+                    </div>
+                    <div className={`p-4 rounded-xl ${stat.bgColor}`}>
+                      <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                    </div>
                   </div>
-                </div>
-                <div className={`p-3 rounded-lg ${stat.bgColor}`}>
-                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
         </div>
 
-        {/* --- Recent Issues --- */}
-        <Card className="glass-effect mb-8">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-xl font-bold">Recent Issues</CardTitle>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm"><Filter className="w-4 h-4 mr-2" />Filter</Button>
-                <Button variant="outline" size="sm" onClick={() => setShowSearch(p => !p)}>
-                  <Search className="w-4 h-4 mr-2" />Search
-                </Button>
+        {/* Animated Recent Issues */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <Card className="backdrop-blur-xl bg-white/80 border-0 shadow-xl mb-8">
+            <CardHeader className="pb-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <motion.div
+                    animate={{ rotate: [0, 360] }}
+                    transition={{
+                      duration: 20,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                    className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500"
+                  >
+                    <Sparkles className="w-5 h-5 text-white" />
+                  </motion.div>
+                  <CardTitle className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+                    Recent Issues
+                  </CardTitle>
+                </div>
+                <div className="flex gap-3 relative">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="hover:scale-105 border-2 hover:border-blue-400"
+                    onClick={() => setShowFilterDropdown((prev) => !prev)}
+                  >
+                    <Filter className="w-4 h-4 mr-2" /> 🎯 Filter
+                  </Button>
+                  <AnimatePresence>
+                    {showFilterDropdown && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="absolute top-full left-0 mt-2 bg-white border rounded shadow-lg p-4 z-10 flex flex-col gap-4"
+                      >
+                        <select
+                          className="w-full border rounded p-2 mb-2"
+                          value={selectedPriority}
+                          onChange={(e) => setSelectedPriority(e.target.value)}
+                        >
+                          <option value="">Select Priority</option>
+                          <option>Critical</option>
+                          <option>High</option>
+                          <option>Medium</option>
+                          <option>Low</option>
+                        </select>
+                        <select
+                          className="w-full border rounded p-2"
+                          value={selectedStatus}
+                          onChange={(e) => setSelectedStatus(e.target.value)}
+                        >
+                          <option value="">Select Status</option>
+                          <option>In Progress</option>
+                          <option>Pending</option>
+                          <option>Resolved</option>
+                        </select>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleDropdownFilter}
+                          >
+                            Apply Filter
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setShowFilterDropdown(false)}
+                          >
+                            Close
+                          </Button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowSearch((p) => !p)}
+                    className="hover:scale-105 border-2 hover:border-green-400"
+                  >
+                    <Search className="w-4 h-4 mr-2" /> 🔍 Search
+                  </Button>
+                </div>
               </div>
-            </div>
-            <AnimatePresence>
-              {showSearch && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="mt-2 flex gap-2"
-                >
-                  <input
-                    type="text"
-                    placeholder="Enter Issue ID"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="border rounded px-2 py-1"
-                  />
-                  <Button onClick={handleSearch}>Go</Button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-            <div className="flex gap-2 mt-2 flex-wrap">
-              {["Critical", "High", "Medium", "Low"].map((p) => (
-                <Button key={p} size="sm" onClick={() => handleFilter("priority", p)}>{p}</Button>
-              ))}
-              {["In Progress", "Pending", "Resolved"].map((s) => (
-                <Button key={s} size="sm" onClick={() => handleFilter("status", s)}>{s}</Button>
-              ))}
-              <Button variant="outline" size="sm" onClick={() => handleFilter("status", "Resolved")}>
-                Show Only Resolved
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
               <AnimatePresence>
-                {filteredIssues.slice(0, visibleCount).map((issue, index) => (
-                  <motion.div key={issue.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3, delay: index * 0.05 }} className="p-4 rounded-lg border bg-card hover:shadow-md transition-shadow">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="font-medium text-sm text-muted-foreground">{issue.id}</span>
-                          <Badge className={getPriorityColor(issue.priority)}>{issue.priority}</Badge>
-                          <Badge className={getStatusColor(issue.status)}>{issue.status}</Badge>
-                        </div>
-                        <h4 className="font-semibold text-foreground mb-1 text-lg">{issue.title}</h4>
-                        <div className="flex gap-2 mb-1">
-                          <span className="text-xs bg-blue-50 px-2 py-1 rounded">Category: {issue.category}</span>
-                          <span className="text-xs bg-orange-50 px-2 py-1 rounded">Priority: {issue.priority}</span>
-                        </div>
-                        <div className="flex items-center text-sm text-muted-foreground mb-2"><MapPin className="w-3 h-3 mr-1" />{issue.location}</div>
-                        <div className="text-sm text-muted-foreground">Description: {issue.description}</div>
-                      </div>
-                      <div className="flex gap-1 ml-4">
-                        <Button variant="ghost" size="sm"><Eye className="w-4 h-4" /></Button>
-                        <Button variant="ghost" size="sm" onClick={() => setEditingIssue(issue)}><Edit className="w-4 h-4" /></Button>
-                        <Button variant="ghost" size="sm"><MoreHorizontal className="w-4 h-4" /></Button>
-                      </div>
+                {showSearch && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                    className="mt-6 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200"
+                  >
+                    <div className="flex gap-3">
+                      <input
+                        type="text"
+                        placeholder="🔍 Search by ID, title, or description..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="flex-1 px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-blue-400 focus:outline-none"
+                      />
+                      <Button
+                        onClick={handleSearch}
+                        className="px-6 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 hover:scale-105"
+                      >
+                        Go
+                      </Button>
                     </div>
                   </motion.div>
-                ))}
+                )}
               </AnimatePresence>
-            </div>
-            {visibleCount < filteredIssues.length && (
-              <div className="mt-4 text-center">
-                <Button variant="outline" onClick={() => setVisibleCount((prev) => prev + 5)}>View All Issues</Button>
+              <div className="flex gap-3 mt-6 flex-wrap">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={clearFilters}
+                  className="hover:shadow-md"
+                >
+                  🧹 Clear All
+                </Button>
               </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* --- Quick Actions --- */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="space-y-6"
-        >
-          <Card className="glass-effect">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold">Quick Actions</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent>
+              <div className="space-y-4">
+                <AnimatePresence>
+                  {filteredIssues.slice(0, visibleCount).map((issue, index) => (
+                    <motion.div
+                      key={issue.id}
+                      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -30, scale: 0.95 }}
+                      transition={{ duration: 0.4, delay: index * 0.05 }}
+                      className="group relative overflow-hidden p-6 rounded-2xl border backdrop-blur-sm bg-white/60 hover:bg-white/80 hover:shadow-xl transition-all duration-500"
+                    >
+                      <div className="relative z-10 flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-4 mb-3">
+                            <span className="font-mono text-sm font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                              {issue.id}
+                            </span>
+                            <Badge
+                              className={`${getPriorityColor(
+                                issue.priority
+                              )} font-semibold px-3 py-1`}
+                            >
+                              {getPriorityEmoji(issue.priority)}{" "}
+                              {issue.priority}
+                            </Badge>
+                            <Badge
+                              className={`${getStatusColor(
+                                issue.status
+                              )} font-semibold px-3 py-1`}
+                            >
+                              {getStatusEmoji(issue.status)} {issue.status}
+                            </Badge>
+                          </div>
+                          <h4 className="font-bold text-gray-900 mb-3 text-lg group-hover:text-blue-600 transition-colors duration-300">
+                            {issue.title}
+                          </h4>
+                          <div className="flex gap-3 mb-3">
+                            <span className="text-xs bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-200 font-medium">
+                              📂 {issue.category}
+                            </span>
+                            <span className="text-xs bg-gradient-to-r from-purple-100 to-purple-50 text-purple-700 px-3 py-1 rounded-full border border-purple-200 font-medium">
+                              ⚡ {issue.priority}
+                            </span>
+                          </div>
+                          <div className="flex items-center text-sm text-gray-600 mb-3">
+                            <MapPin className="w-4 h-4 mr-2 text-red-500" />
+                            <span className="font-medium">
+                              {issue.location}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-700 leading-relaxed bg-gray-50 p-3 rounded-lg">
+                            {issue.description}
+                          </p>
+                        </div>
+                        <div className="flex gap-2 ml-6">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="hover:bg-blue-100 hover:text-blue-600"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setEditingIssue(issue)}
+                            className="hover:bg-green-100 hover:text-green-600"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="hover:bg-purple-100 hover:text-purple-600"
+                          >
+                            <MoreHorizontal className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+              {visibleCount < filteredIssues.length && (
+                <div className="mt-8 text-center">
+                  <Button
+                    variant="outline"
+                    onClick={() => setVisibleCount((prev) => prev + 5)}
+                    className="px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 hover:from-blue-600 hover:to-indigo-600 hover:scale-105"
+                  >
+                    <Zap className="w-4 h-4 mr-2" />
+                    Load More Issues
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Quick Actions */}
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <Card className="backdrop-blur-xl bg-white/80 border-0 shadow-xl">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent flex items-center gap-3">
+                <motion.div
+                  animate={{ rotate: [0, 10, -10, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                  className="p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500"
+                >
+                  <Zap className="w-5 h-5 text-white" />
+                </motion.div>
+                Quick Actions
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
               {[
-                { label: "Create New Issue", icon: AlertCircle },
-                { label: "Manage Users", icon: Users },
-                { label: "View Map", icon: MapPin },
-                { label: "Analytics", icon: BarChart3 },
-                { label: "Archived Issues", icon: Archive },
+                {
+                  label: "Create New Issue",
+                  icon: AlertCircle,
+                  color: "from-red-500 to-pink-500",
+                },
+                {
+                  label: "Manage Users",
+                  icon: Users,
+                  color: "from-blue-500 to-indigo-500",
+                },
+                {
+                  label: "View Map",
+                  icon: MapPin,
+                  color: "from-green-500 to-emerald-500",
+                },
+                {
+                  label: "Analytics",
+                  icon: BarChart3,
+                  color: "from-purple-500 to-violet-500",
+                },
+                {
+                  label: "Archived Issues",
+                  icon: Archive,
+                  color: "from-orange-500 to-amber-500",
+                },
               ].map((action, i) => (
-                <motion.div key={i} whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 300 }}>
-                  <Button className="w-full justify-start" variant="outline">
-                    <action.icon className="w-4 h-4 mr-2" />
-                    {action.label}
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 + 0.5 }}
+                  whileHover={{ scale: 1.03, x: 10 }}
+                >
+                  <Button
+                    className={`w-full justify-start p-4 h-auto bg-gradient-to-r ${action.color} hover:shadow-lg text-white`}
+                  >
+                    <action.icon className="w-5 h-5 mr-3" />
+                    <span className="font-semibold">{action.label}</span>
                   </Button>
                 </motion.div>
               ))}
             </CardContent>
           </Card>
         </motion.div>
-
       </main>
-      {/* --- Edit Modal --- */}
+
+      {/* Animated Edit Modal */}
       <AnimatePresence>
         {editingIssue && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
           >
             <motion.div
-              initial={{ y: -50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -50, opacity: 0 }}
-              className="bg-white p-6 rounded w-96"
+              initial={{ scale: 0.8, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.8, opacity: 0, y: 50 }}
+              className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl"
             >
-              <h3 className="font-bold mb-4">Edit Issue {editingIssue.id}</h3>
-              <input
-                type="text"
-                value={editingIssue.title}
-                onChange={(e) => setEditingIssue({ ...editingIssue, title: e.target.value })}
-                className="w-full mb-2 border px-2 py-1 rounded"
-              />
-              <select
-                value={editingIssue.priority}
-                onChange={(e) => setEditingIssue({ ...editingIssue, priority: e.target.value })}
-                className="w-full mb-2 border px-2 py-1 rounded"
-              >
-                <option>Critical</option>
-                <option>High</option>
-                <option>Medium</option>
-                <option>Low</option>
-              </select>
-              <select
-                value={editingIssue.status}
-                onChange={(e) => setEditingIssue({ ...editingIssue, status: e.target.value })}
-                className="w-full mb-4 border px-2 py-1 rounded"
-              >
-                <option>In Progress</option>
-                <option>Pending</option>
-                <option>Resolved</option>
-              </select>
-              <div className="flex justify-end gap-2">
-                <Button onClick={() => setEditingIssue(null)}>Cancel</Button>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500">
+                  <Edit className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">
+                  Edit Issue {editingIssue.id}
+                </h3>
+              </div>
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  value={editingIssue.title}
+                  onChange={(e) =>
+                    setEditingIssue({ ...editingIssue, title: e.target.value })
+                  }
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
+                />
+                <select
+                  value={editingIssue.priority}
+                  onChange={(e) =>
+                    setEditingIssue({
+                      ...editingIssue,
+                      priority: e.target.value,
+                    })
+                  }
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
+                >
+                  <option>Critical</option>
+                  <option>High</option>
+                  <option>Medium</option>
+                  <option>Low</option>
+                </select>
+                <select
+                  value={editingIssue.status}
+                  onChange={(e) =>
+                    setEditingIssue({ ...editingIssue, status: e.target.value })
+                  }
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
+                >
+                  <option>In Progress</option>
+                  <option>Pending</option>
+                  <option>Resolved</option>
+                </select>
+              </div>
+              <div className="flex justify-end gap-3 mt-8">
+                <Button
+                  onClick={() => setEditingIssue(null)}
+                  variant="outline"
+                  className="px-6 py-2 hover:bg-gray-100"
+                >
+                  Cancel
+                </Button>
                 <Button
                   onClick={() => {
-                    setFilteredIssues(prev =>
-                      prev.map(i => (i.id === editingIssue.id ? editingIssue : i))
+                    setAllIssues((prev) =>
+                      prev.map((i) =>
+                        i.id === editingIssue.id ? editingIssue : i
+                      )
+                    );
+                    setFilteredIssues((prev) =>
+                      prev.map((i) =>
+                        i.id === editingIssue.id ? editingIssue : i
+                      )
                     );
                     setEditingIssue(null);
                   }}
+                  className="px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white"
                 >
-                  Save
+                  Save Changes
                 </Button>
               </div>
             </motion.div>
@@ -260,7 +665,6 @@ const AdminDashboard = () => {
       <Footer />
     </div>
   );
-
-}
+};
 
 export default AdminDashboard;

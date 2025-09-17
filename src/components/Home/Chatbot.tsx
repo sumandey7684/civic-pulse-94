@@ -1,7 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
 
-const GEMINI_API_KEY = "AIzaSyBpfmpdipBLK6v92bY_BsXnw3VkOJOlFpE"; // ⚠️ Don't keep this in frontend for production
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+import React, { useState, useRef, useEffect } from "react";
 
 const Chatbot = () => {
   const [open, setOpen] = useState(false);
@@ -17,41 +15,36 @@ const Chatbot = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, open]);
 
-  // Send message to Gemini API
-  const sendToGemini = async (userMessage: string) => {
+
+  // Send message to Botpress API
+  const sendToBotpress = async (userMessage: string) => {
     setLoading(true);
     setTyping(true);
 
     try {
-      const res = await fetch(GEMINI_API_URL, {
+      // Replace with your Botpress Cloud endpoint and botId
+      const BOT_ID = "YOUR_BOTPRESS_BOT_ID";
+      const BOTPRESS_API_KEY = "bp_bak_lo7pU-IYlMnhSmLqaaosoxBOwmwBSeHvBL_R";
+      const BOTPRESS_API_URL = `https://api.botpress.cloud/v1/bots/${BOT_ID}/converse`;
+      const res = await fetch(BOTPRESS_API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: "user",
-              parts: [{ text: userMessage }]
-            }
-          ]
-        })
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${BOTPRESS_API_KEY}`
+        },
+        body: JSON.stringify({ messages: [{ type: "text", text: userMessage }] })
       });
-
       const data = await res.json();
-      console.log("Gemini Response:", data);
-
-      const botReply =
-        data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-        "⚠️ Sorry, I couldn't generate a response.";
-
+      console.log("Botpress Response:", data);
+      const botReply = data?.responses?.[0]?.text || "⚠️ Sorry, I couldn't generate a response.";
       setMessages((msgs) => [...msgs, { sender: "bot", text: botReply }]);
     } catch (err) {
-      console.error("Gemini API Error:", err);
+      console.error("Botpress API Error:", err);
       setMessages((msgs) => [
         ...msgs,
-        { sender: "bot", text: "❌ Error connecting to Gemini API." }
+        { sender: "bot", text: "❌ Error connecting to Botpress API." }
       ]);
     }
-
     setTyping(false);
     setLoading(false);
   };
@@ -64,7 +57,7 @@ const Chatbot = () => {
     setMessages((msgs) => [...msgs, { sender: "user", text: input }]);
     const userMessage = input;
     setInput("");
-    await sendToGemini(userMessage);
+    await sendToBotpress(userMessage);
   };
 
   return (
@@ -82,14 +75,17 @@ const Chatbot = () => {
       {/* Chat Window */}
       {open && (
         <div
-          className="fixed bottom-6 right-6 w-80 border rounded-2xl shadow-2xl flex flex-col z-50"
+          className="fixed bottom-6 right-6 w-80 border-0 rounded-3xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] flex flex-col z-50 transition-all duration-500"
           style={{
-            background: "rgba(255,255,255,0.85)",
-            backdropFilter: "blur(18px)"
+            background: "linear-gradient(135deg, rgba(255,255,255,0.55) 60%, rgba(245,245,255,0.35) 100%)",
+            backdropFilter: "blur(32px)",
+            WebkitBackdropFilter: "blur(32px)",
+            boxShadow: "0 8px 32px 0 rgba(31,38,135,0.37)",
+            border: "1px solid rgba(255,255,255,0.12)",
           }}
         >
           {/* Header */}
-          <div className="px-4 py-3 border-b font-bold flex justify-between items-center rounded-t-2xl bg-white/60">
+          <div className="px-4 py-3 border-b-0 font-bold flex justify-between items-center rounded-t-3xl bg-white/40 backdrop-blur-md shadow-sm">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-full flex items-center justify-center bg-purple-200 text-xl shadow-md">
                 ✨
@@ -105,7 +101,7 @@ const Chatbot = () => {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-4 py-2" style={{ maxHeight: 300 }}>
+          <div className="flex-1 overflow-y-auto px-4 py-2 scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-300" style={{ maxHeight: 320 }}>
             {messages.map((msg, idx) => (
               <div
                 key={idx}
@@ -114,9 +110,15 @@ const Chatbot = () => {
                 }`}
               >
                 <div
-                  className={`px-3 py-2 rounded-2xl text-sm max-w-[70%] ${
-                    msg.sender === "user" ? "bg-blue-100" : "bg-gray-100"
+                  className={`px-3 py-2 rounded-2xl text-sm max-w-[70%] shadow-sm ${
+                    msg.sender === "user"
+                      ? "bg-gradient-to-br from-blue-100 via-white to-blue-200 text-gray-900"
+                      : "bg-gradient-to-br from-white via-gray-100 to-gray-200 text-gray-700"
                   }`}
+                  style={{
+                    border: msg.sender === "user" ? "1px solid #c7d2fe" : "1px solid #e5e7eb",
+                    backdropFilter: "blur(8px)",
+                  }}
                 >
                   {msg.text}
                 </div>
@@ -126,7 +128,7 @@ const Chatbot = () => {
             {/* Typing */}
             {typing && (
               <div className="mb-2 flex justify-start">
-                <div className="px-3 py-2 rounded-2xl text-sm max-w-[70%] bg-gray-200 text-gray-500">
+                <div className="px-3 py-2 rounded-2xl text-sm max-w-[70%] bg-gradient-to-br from-white via-gray-100 to-gray-200 text-gray-500 shadow-sm" style={{backdropFilter: "blur(8px)", border: "1px solid #e5e7eb"}}>
                   AI is typing...
                 </div>
               </div>
@@ -136,9 +138,9 @@ const Chatbot = () => {
           </div>
 
           {/* Input */}
-          <form onSubmit={handleSend} className="flex border-t">
+          <form onSubmit={handleSend} className="flex border-t-0 bg-white/30 backdrop-blur-md rounded-b-3xl shadow-sm">
             <input
-              className="flex-1 px-3 py-2 outline-none bg-transparent text-black"
+              className="flex-1 px-3 py-2 outline-none bg-transparent text-black placeholder:text-gray-400"
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -147,7 +149,7 @@ const Chatbot = () => {
             />
             <button
               type="submit"
-              className="px-4 py-2 bg-purple-500 text-white rounded-r-2xl font-bold"
+              className="px-4 py-2 bg-gradient-to-br from-purple-500 via-pink-400 to-yellow-400 text-white rounded-r-3xl font-bold shadow-md hover:scale-105 transition-transform"
               disabled={loading}
             >
               Send

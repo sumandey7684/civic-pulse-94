@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
+import DashboardPage from "@/pages/Dashboard";
 import Account from "./pages/Account";
 import ResetPassword from "./pages/ResetPassword";
 
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

@@ -150,31 +150,25 @@ const ReportIssue = () => {
         continue;
       }
       setVisionLoading(true);
-      // Convert image to base64
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64data = reader.result?.toString().split(",")[1];
-        // Call local backend for Google Vision API
-        try {
-          const visionRes = await axios.post(
-            "http://localhost:5000/vision",
-            { imageBase64: base64data }
-          );
-          const labels = visionRes.data.map((l) => l.description.toLowerCase()) || [];
-          const validLabels = categoryLabels[formData.category] || [];
-          const isValid = validLabels.length === 0 || labels.some(label => validLabels.some(vl => label.includes(vl)));
-          if (isValid) {
-            toast({ title: "✅ Suitable for upload", description: `Photo matches category: ${formData.category}` });
-            setSelectedFiles((prev) => [...prev, file]);
-          } else {
-            toast({ title: "❌ Invalid photo", description: `Photo does not match category: ${formData.category}` });
-          }
-        } catch (err) {
-          toast({ title: "Vision API Error", description: "Could not validate image." });
+      // Face detection upload route
+      const formData = new FormData();
+      formData.append("photo", file);
+      try {
+        const res = await fetch("http://localhost:3000/upload", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        if (data.error) {
+          toast({ title: "❌ Invalid photo", description: data.error });
+        } else {
+          toast({ title: "✅ Suitable for upload", description: "Photo accepted, no human face detected." });
+          setSelectedFiles((prev) => [...prev, file]);
         }
-        setVisionLoading(false);
-      };
-      reader.readAsDataURL(file);
+      } catch (err) {
+        toast({ title: "Upload Error", description: "Could not validate image." });
+      }
+      setVisionLoading(false);
     }
   };
 

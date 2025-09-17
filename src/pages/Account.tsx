@@ -94,6 +94,17 @@ const Account = () => {
                   <span className="font-medium">User ID:</span> {user.id}
                 </div>
               </div>
+              {/* Dashboard & Reward button for citizens */}
+              {profileData?.role === "citizen" && (
+                <div className="my-8 flex justify-center">
+                  <button
+                    className="px-10 py-5 bg-blue-600 text-white rounded-xl shadow-xl text-2xl font-bold hover:bg-blue-700 transition-all"
+                    onClick={() => navigate("/dashboard")}
+                  >
+                    Dashboard & Reward
+                  </button>
+                </div>
+              )}
               <div className="mt-8">
                 {/* Admin dashboard view */}
                 {issues.length > 0 && (

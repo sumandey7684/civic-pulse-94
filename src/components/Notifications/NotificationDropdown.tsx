@@ -139,7 +139,7 @@ export const NotificationDropdown = () => {
 
                 {/* Notifications List */}
                 <ScrollArea className="max-h-96">
-                  <div className="p-2">
+                  <div className="p-3 premium-scrollbar overflow-y-auto max-h-96 rounded-xl glass-effect shadow-lg">
                     {notifications.length === 0 ? (
                       <div className="text-center py-8 text-muted-foreground">
                         <Bell className="h-12 w-12 mx-auto mb-4 opacity-50" />
@@ -152,17 +152,17 @@ export const NotificationDropdown = () => {
                             key={notification.id}
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className={`p-3 rounded-lg border transition-all duration-200 hover:shadow-md group cursor-pointer ${
+                            className={`p-3 rounded-lg border transition-all duration-200 hover:shadow-lg group cursor-pointer ${
                               notification.status === "unread" 
-                                ? "bg-primary/5 border-primary/20" 
-                                : "bg-muted/30 border-border"
+                                ? "bg-primary/10 border-primary/30" 
+                                : "bg-muted/40 border-border"
                             }`}
+                            style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
                           >
                             <div className="flex items-start space-x-3">
                               <div className="flex-shrink-0 mt-1">
                                 {getTypeIcon(notification.type)}
                               </div>
-                              
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center justify-between mb-1">
                                   <h4 className={`text-sm font-medium truncate ${
@@ -172,7 +172,6 @@ export const NotificationDropdown = () => {
                                   }`}>
                                     {notification.title}
                                   </h4>
-                                  
                                   <Button
                                     size="sm"
                                     variant="ghost"
@@ -187,11 +186,9 @@ export const NotificationDropdown = () => {
                                     <Check className="h-3 w-3" />
                                   </Button>
                                 </div>
-                                
                                 <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
                                   {notification.description}
                                 </p>
-                                
                                 <div className="flex items-center text-xs text-muted-foreground">
                                   <Clock className="h-3 w-3 mr-1" />
                                   {notification.timestamp}

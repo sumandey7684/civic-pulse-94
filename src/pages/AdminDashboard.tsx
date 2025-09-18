@@ -23,6 +23,7 @@ import {
 import { Header } from "@/components/Layout/Header";
 import { Footer } from "@/components/Layout/Footer";
 
+// Stats Data
 const stats = [
   {
     title: "Total Issues",
@@ -58,56 +59,114 @@ const stats = [
   },
 ];
 
+// Issues Data
 const initialIssues = [
   {
     id: "ISS-001",
-    title: "Broken street light on MG Road",
+    title: "Broken street light near Ram Mandir Square",
     description:
-      "Street light has been non-functional for 3 days causing safety concerns",
-    location: "MG Road, Sector 15",
+      "Bhai, e street light ta 3 din dhari bandh achhi. Rati bele loka mane chalibaku bhaya laguchi, safety khatra heuchhi.",
+    location: "Ram Mandir Square, Bhubaneswar",
     category: "Infrastructure",
     priority: "High",
     status: "In Progress",
+    citizenName: "Satyajit Das",
   },
   {
     id: "ISS-002",
-    title: "Pothole near bus stop",
-    description: "Large pothole causing traffic issues and vehicle damage",
-    location: "Bus Stop, Park Street",
+    title: "Bada pothole near Master Canteen Bus Stop",
+    description:
+      "Master Canteen bus stop re gote bada pothole heichi. Gadi mane phasi jauchhi, jam o gadi damage heuchhi.",
+    location: "Master Canteen, Bhubaneswar",
     category: "Road",
     priority: "Critical",
     status: "Pending",
+    citizenName: "Subhasmita Nayak",
   },
   {
     id: "ISS-003",
-    title: "Garbage collection delayed",
-    description: "Waste has not been collected for 2 days in residential area",
-    location: "Residential Block A",
+    title: "Garbage pile up in Saheed Nagar Lane-4",
+    description:
+      "2 din dhari garbage uthai nahanti. Smell bahut kharap heijauchi, mosquito bhi baruchi.",
+    location: "Saheed Nagar, Lane-4, Bhubaneswar",
     category: "Sanitation",
     priority: "Medium",
     status: "Resolved",
+    citizenName: "Rakesh Pradhan",
   },
   {
     id: "ISS-004",
-    title: "Water leakage in public park",
-    description: "Water pipe burst causing flooding in park area",
-    location: "Central Park",
+    title: "Water leakage inside Ekamra Kanan Park",
+    description:
+      "Pipe burst hei flooding heigala park bhitare. Bahut paani waste heuchhi, loka mane asubidha face karuchhanti.",
+    location: "Ekamra Kanan, Nayapalli, Bhubaneswar",
     category: "Water",
     priority: "High",
     status: "In Progress",
+    citizenName: "Ananya Mohanty",
   },
   {
     id: "ISS-005",
-    title: "Noise pollution from construction",
-    description: "Construction work exceeding permitted noise levels",
-    location: "Commercial District",
+    title: "Night construction noise near KIIT Square",
+    description:
+      "Patia re rati 12 ta pare bhi construction choluchhi. Awaj bahut disturbing, student mane nidra pauchhanti nahi.",
+    location: "KIIT Square, Patia, Bhubaneswar",
     category: "Environment",
     priority: "Low",
     status: "Pending",
+    citizenName: "Debasish Rout",
   },
 ];
 
-// Animated glassmorphism background
+// Quick Actions Definitions with Details
+const quickActions = [
+  {
+    label: "Create New Issue",
+    icon: AlertCircle,
+    color: "from-red-500 to-pink-500",
+    description:
+      "Submit a new civic issue to the dashboard and track its resolution progress.",
+    details:
+      "Use this action to log infrastructure problems, safety hazards, or complaints. Fill out the core details and assign a priority based on urgency.",
+  },
+  {
+    label: "Manage Users",
+    icon: Users,
+    color: "from-blue-500 to-indigo-500",
+    description:
+      "Administer user accounts, roles, and permissions across the platform.",
+    details:
+      "Add, edit, or remove users. Assign different privileges such as admin, operator, or viewer as required for proper access control.",
+  },
+  {
+    label: "View Map",
+    icon: MapPin,
+    color: "from-green-500 to-emerald-500",
+    description: "Visualize reported issues on a city-wide or localized map.",
+    details:
+      "Explore issue density, filter by category, and click markers for more details. The map is interactive and updates automatically with each new report.",
+  },
+  {
+    label: "Analytics",
+    icon: BarChart3,
+    color: "from-purple-500 to-violet-500",
+    description:
+      "See key statistics, charts, and insights about issue trends and resolution performance.",
+    details:
+      "Review performance metrics such as resolution rate, response time, active issues, and trend analysis by category or region.",
+  },
+  {
+    label: "Archived Issues",
+    icon: Archive,
+    color: "from-orange-500 to-amber-500",
+    description:
+      "Browse previously resolved or closed issues for future reference.",
+    details:
+      "Access historical civic issue data, download reports, and analyze closure rates. Supports search and filtering for archived records.",
+  },
+];
+
+// Glassmorphism Animated Background
 const AnimatedBackground = () => (
   <div className="fixed inset-0 -z-10 overflow-hidden">
     <div className="absolute -top-40 -right-32 w-80 h-80 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-500/20 blur-3xl animate-pulse"></div>
@@ -169,10 +228,12 @@ const AdminDashboard = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [editingIssue, setEditingIssue] = useState<any>(null);
-
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [selectedPriority, setSelectedPriority] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
+
+  // State for action modal
+  const [activeAction, setActiveAction] = useState<number | null>(null);
 
   useEffect(() => {
     setFilteredIssues(allIssues);
@@ -218,7 +279,7 @@ const AdminDashboard = () => {
       <AnimatedBackground />
       <Header />
       <main className="container mx-auto px-6 py-8">
-        {/* Modern Stats Grid */}
+        {/* Stats Grid */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -286,17 +347,6 @@ const AdminDashboard = () => {
             <CardHeader className="pb-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <motion.div
-                    animate={{ rotate: [0, 360] }}
-                    transition={{
-                      duration: 20,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                    className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500"
-                  >
-                    <Sparkles className="w-5 h-5 text-white" />
-                  </motion.div>
                   <CardTitle className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
                     Recent Issues
                   </CardTitle>
@@ -514,44 +564,11 @@ const AdminDashboard = () => {
           <Card className="backdrop-blur-xl bg-white/80 border-0 shadow-xl">
             <CardHeader>
               <CardTitle className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent flex items-center gap-3">
-                <motion.div
-                  animate={{ rotate: [0, 10, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-                  className="p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500"
-                >
-                  <Zap className="w-5 h-5 text-white" />
-                </motion.div>
-                Quick Actions
+                Quick Information
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {[
-                {
-                  label: "Create New Issue",
-                  icon: AlertCircle,
-                  color: "from-red-500 to-pink-500",
-                },
-                {
-                  label: "Manage Users",
-                  icon: Users,
-                  color: "from-blue-500 to-indigo-500",
-                },
-                {
-                  label: "View Map",
-                  icon: MapPin,
-                  color: "from-green-500 to-emerald-500",
-                },
-                {
-                  label: "Analytics",
-                  icon: BarChart3,
-                  color: "from-purple-500 to-violet-500",
-                },
-                {
-                  label: "Archived Issues",
-                  icon: Archive,
-                  color: "from-orange-500 to-amber-500",
-                },
-              ].map((action, i) => (
+              {quickActions.map((action, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, x: -20 }}
@@ -561,6 +578,7 @@ const AdminDashboard = () => {
                 >
                   <Button
                     className={`w-full justify-start p-4 h-auto bg-gradient-to-r ${action.color} hover:shadow-lg text-white`}
+                    onClick={() => setActiveAction(i)}
                   >
                     <action.icon className="w-5 h-5 mr-3" />
                     <span className="font-semibold">{action.label}</span>
@@ -570,9 +588,62 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
         </motion.div>
+
+        {/* Action Description Modal */}
+        <AnimatePresence>
+          {activeAction !== null && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  {activeAction !== null &&
+                    (() => {
+                      const ActionIcon = quickActions[activeAction].icon;
+                      return (
+                        <div
+                          className={`p-2 rounded-lg bg-gradient-to-r ${quickActions[activeAction].color}`}
+                        >
+                          <ActionIcon className="w-6 h-6 text-white" />
+                        </div>
+                      );
+                    })()}
+                  <h3 className="text-xl font-bold text-gray-900">
+                    {quickActions[activeAction].label}
+                  </h3>
+                </div>
+                <div className="mb-4">
+                  <p className="text-lg text-gray-700 font-semibold mb-2">
+                    {quickActions[activeAction].description}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    {quickActions[activeAction].details}
+                  </p>
+                </div>
+                <div className="flex justify-end">
+                  <Button
+                    variant="outline"
+                    onClick={() => setActiveAction(null)}
+                    className="px-6 py-2 hover:bg-gray-100"
+                  >
+                    Close
+                  </Button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
 
-      {/* Animated Edit Modal */}
+      {/* Edit Issue Modal */}
       <AnimatePresence>
         {editingIssue && (
           <motion.div

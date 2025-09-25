@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const vision = require('@google-cloud/vision');
-const notifications = require('./notifications');
-const contact = require('./contact');
+const express = require('express');
+const cors = require('cors');
+const vision = require('@google-cloud/vision');
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
@@ -23,8 +24,4 @@ app.post('/vision', async (req, res) => {
   }
 });
 
-// Notifications API
-app.use('/api/notifications', notifications);
-app.use('/api/contact', contact);
-
-app.listen(5000, () => console.log('Server running on port 5000'));
+app.listen(5000, () => console.log('Vision server running on port 5000'));

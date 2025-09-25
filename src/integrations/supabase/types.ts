@@ -14,46 +14,20 @@ export type Database = {
   }
   public: {
     Tables: {
-      user_issue_rewards: {
-        Row: {
-          id: number;
-          user_id: string;
-          month: string;
-          issue_count: number;
-          tokens_claimed: boolean;
-          wallet_address: string | null;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          user_id: string;
-          month: string;
-          issue_count?: number;
-          tokens_claimed?: boolean;
-          wallet_address?: string | null;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: {
-          issue_count?: number;
-          tokens_claimed?: boolean;
-          wallet_address?: string | null;
-          updated_at?: string;
-        };
-      };
-    };
+      [_ in never]: never
+    }
     Views: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Functions: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Enums: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     CompositeTypes: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
   }
 }
 

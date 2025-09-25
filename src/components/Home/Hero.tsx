@@ -38,7 +38,7 @@ export const Hero = () => {
 
   return (
     <>
-  <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white text-black dark:bg-gradient-to-br dark:from-[#0a0a23] dark:to-[#1e3a8a] dark:text-white">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0 gradient-hero opacity-10" />
         <div className="absolute inset-0">

@@ -23,11 +23,6 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        darkgradient: {
-          DEFAULT: "#0a0a23",
-          blue: "#1e3a8a",
-          gradient: "linear-gradient(135deg, #0a0a23 0%, #1e3a8a 100%)"
-        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -78,9 +73,6 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-      },
-      backgroundImage: {
-        'dark-blue-gradient': 'linear-gradient(135deg, #0a0a23 0%, #1e3a8a 100%)',
       },
       borderRadius: {
         lg: "var(--radius)",

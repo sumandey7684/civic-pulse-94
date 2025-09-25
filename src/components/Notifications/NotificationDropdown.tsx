@@ -61,7 +61,6 @@ const dummyNotifications: Notification[] = [
 export const NotificationDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>(dummyNotifications);
-  const [showAll, setShowAll] = useState(false);
 
   const unreadCount = notifications.filter(n => n.status === "unread").length;
 
@@ -139,7 +138,7 @@ export const NotificationDropdown = () => {
 
                 {/* Notifications List */}
                 <ScrollArea className="max-h-96">
-                  <div className="p-3 premium-scrollbar overflow-y-auto max-h-96 rounded-xl glass-effect shadow-lg">
+                  <div className="p-2">
                     {notifications.length === 0 ? (
                       <div className="text-center py-8 text-muted-foreground">
                         <Bell className="h-12 w-12 mx-auto mb-4 opacity-50" />
@@ -152,17 +151,17 @@ export const NotificationDropdown = () => {
                             key={notification.id}
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className={`p-3 rounded-lg border transition-all duration-200 hover:shadow-lg group cursor-pointer ${
+                            className={`p-3 rounded-lg border transition-all duration-200 hover:shadow-md group cursor-pointer ${
                               notification.status === "unread" 
-                                ? "bg-primary/10 border-primary/30" 
-                                : "bg-muted/40 border-border"
+                                ? "bg-primary/5 border-primary/20" 
+                                : "bg-muted/30 border-border"
                             }`}
-                            style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
                           >
                             <div className="flex items-start space-x-3">
                               <div className="flex-shrink-0 mt-1">
                                 {getTypeIcon(notification.type)}
                               </div>
+                              
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center justify-between mb-1">
                                   <h4 className={`text-sm font-medium truncate ${
@@ -172,6 +171,7 @@ export const NotificationDropdown = () => {
                                   }`}>
                                     {notification.title}
                                   </h4>
+                                  
                                   <Button
                                     size="sm"
                                     variant="ghost"
@@ -186,9 +186,11 @@ export const NotificationDropdown = () => {
                                     <Check className="h-3 w-3" />
                                   </Button>
                                 </div>
+                                
                                 <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
                                   {notification.description}
                                 </p>
+                                
                                 <div className="flex items-center text-xs text-muted-foreground">
                                   <Clock className="h-3 w-3 mr-1" />
                                   {notification.timestamp}
@@ -208,92 +210,10 @@ export const NotificationDropdown = () => {
                     variant="ghost" 
                     size="sm" 
                     className="w-full text-xs text-muted-foreground hover:text-foreground"
-                    onClick={() => setShowAll(true)}
                   >
                     View All Notifications
                   </Button>
                 </div>
-      {/* Full notifications modal */}
-      <AnimatePresence>
-        {showAll && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/30"
-          >
-            <div className="glass-effect rounded-xl border border-border shadow-2xl w-full max-w-lg mx-auto">
-              <div className="flex items-center justify-between p-4 border-b border-border">
-                <h3 className="text-lg font-semibold text-foreground">All Notifications</h3>
-                <Button size="sm" variant="ghost" onClick={() => setShowAll(false)} className="h-8 w-8 p-0">
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-              <ScrollArea className="max-h-[70vh]">
-                <div className="p-4 space-y-3">
-                  {notifications.length === 0 ? (
-                    <div className="text-center py-8 text-muted-foreground">
-                      <Bell className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                      <p>No notifications yet</p>
-                    </div>
-                  ) : (
-                    notifications.map((notification) => (
-                      <motion.div
-                        key={notification.id}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className={`p-3 rounded-lg border transition-all duration-200 hover:shadow-md group cursor-pointer ${
-                          notification.status === "unread"
-                            ? "bg-primary/5 border-primary/20"
-                            : "bg-muted/30 border-border"
-                        }`}
-                      >
-                        <div className="flex items-start space-x-3">
-                          <div className="flex-shrink-0 mt-1">
-                            {getTypeIcon(notification.type)}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between mb-1">
-                              <h4 className={`text-sm font-medium truncate ${
-                                notification.status === "unread"
-                                  ? "text-foreground"
-                                  : "text-muted-foreground"
-                              }`}>
-                                {notification.title}
-                              </h4>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  notification.status === "unread"
-                                    ? markAsRead(notification.id)
-                                    : markAsUnread(notification.id);
-                                }}
-                              >
-                                <Check className="h-3 w-3" />
-                              </Button>
-                            </div>
-                            <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
-                              {notification.description}
-                            </p>
-                            <div className="flex items-center text-xs text-muted-foreground">
-                              <Clock className="h-3 w-3 mr-1" />
-                              {notification.timestamp}
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))
-                  )}
-                </div>
-              </ScrollArea>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
               </div>
             </motion.div>
           </>

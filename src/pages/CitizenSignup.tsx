@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Layout/Header";
 import { Footer } from "@/components/Layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -22,36 +21,15 @@ const CitizenSignup = () => {
     password: "",
   });
 
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setLoading(true);
-    // Check if email already exists as admin
-    const { data: profile, error: fetchError } = await (supabase as any)
-      .from("profiles")
-      .select("role")
-      .eq("email", formData.email)
-      .maybeSingle();
-    if (fetchError) {
-      setError("Error checking account.");
-      setLoading(false);
-      return;
-    }
-    if (profile && profile.role === "admin") {
-      setError("This email is already registered as an admin.");
-      setLoading(false);
-      return;
-    }
-    // TODO: integrate API for citizen signup
+    console.log("Citizen signup:", formData);
+    // TODO: integrate API
     navigate("/login"); // redirect to login after signup
-    setLoading(false);
   };
 
   return (
-  <div className="min-h-screen bg-white text-black dark:bg-dark-blue-gradient dark:text-white">
+    <div className="min-h-screen bg-background">
       <Header />
 
       <main className="pt-20 pb-12">
